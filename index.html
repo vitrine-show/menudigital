@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Esquina do Espeto — Cardápio</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --amarelo: #F5A800;
+    --amarelo-escuro: #C98800;
+    --marrom: #1a0e05;
+    --marrom-medio: #2d1a08;
+    --marrom-claro: #3d2510;
+    --branco: #fff8f0;
+    --cinza: #c8b89a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--marrom);
+    font-family: 'Barlow', sans-serif;
+    color: var(--branco);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(180deg, #0d0600 0%, var(--marrom-medio) 100%);
+    text-align: center;
+    padding: 32px 20px 24px;
+    border-bottom: 3px solid var(--amarelo);
+    position: relative;
+  }
+
+  .header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(28px, 7vw, 48px);
+    letter-spacing: 4px;
+    color: var(--branco);
+    text-shadow: 2px 2px 0 var(--amarelo-escuro);
+  }
+  .header p {
+    color: var(--amarelo);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* TABS */
+  .tabs-wrapper {
+    background: var(--marrom-medio);
+    border-bottom: 2px solid var(--marrom-claro);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .tabs-wrapper::-webkit-scrollbar { display: none; }
+  .tabs {
+    display: flex;
+    min-width: max-content;
+    padding: 0 12px;
+  }
+  .tab {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 14px 18px;
+    color: var(--cinza);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all .2s;
+    white-space: nowrap;
+  }
+  .tab:hover { color: var(--branco); }
+  .tab.active {
+    color: var(--amarelo);
+    border-bottom-color: var(--amarelo);
+  }
+
+  /* SECTIONS */
+  .section { display: none; padding: 24px 16px 120px; max-width: 640px; margin: 0 auto; }
+  .section.active { display: block; }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 38px;
+    letter-spacing: 3px;
+    color: var(--amarelo);
+    margin-bottom: 4px;
+    position: relative;
+    display: inline-block;
+  }
+  .section-title::after {
+    content: '';
+    display: block;
+    height: 3px;
+    background: linear-gradient(90deg, var(--amarelo), transparent);
+    margin-top: 4px;
+    width: 100%;
+  }
+  .section-subtitle {
+    font-size: 12px;
+    color: var(--cinza);
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  /* ITEM CARD */
+  .item {
+    background: var(--marrom-medio);
+    border: 1px solid var(--marrom-claro);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    cursor: pointer;
+    transition: all .2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .item::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--amarelo);
+    opacity: 0;
+    transition: opacity .2s;
+  }
+  .item:hover { border-color: var(--amarelo-escuro); background: #3a2010; }
+  .item.selected {
+    border-color: var(--amarelo);
+    background: #3a2505;
+  }
+  .item.selected::before { opacity: 1; }
+
+  .item-info { flex: 1; }
+  .item-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--branco);
+    line-height: 1.2;
+  }
+  .item-desc {
+    font-size: 12px;
+    color: var(--cinza);
+    margin-top: 2px;
+  }
+  .item-price {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--amarelo);
+    white-space: nowrap;
+  }
+  .item-price small {
+    font-size: 11px;
+    color: var(--cinza);
+    font-weight: 500;
+    display: block;
+    text-align: right;
+  }
+
+  /* QTY CONTROL */
+  .qty-ctrl {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--marrom-claro);
+    border-radius: 6px;
+    padding: 4px 6px;
+  }
+  .qty-btn {
+    width: 26px;
+    height: 26px;
+    border-radius: 4px;
+    border: none;
+    background: var(--amarelo);
+    color: var(--marrom);
+    font-size: 16px;
+    font-weight: 900;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: background .15s;
+  }
+  .qty-btn:hover { background: var(--branco); }
+  .qty-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--branco);
+    min-width: 20px;
+    text-align: center;
+  }
+
+  /* OBSERVAÇÃO */
+  .obs-box {
+    background: var(--marrom-medio);
+    border: 1px solid var(--marrom-claro);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-top: 24px;
+  }
+  .obs-box label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--amarelo);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .obs-box textarea {
+    width: 100%;
+    background: var(--marrom-claro);
+    border: 1px solid #5a3a20;
+    border-radius: 6px;
+    color: var(--branco);
+    font-family: 'Barlow', sans-serif;
+    font-size: 14px;
+    padding: 10px 12px;
+    resize: none;
+    outline: none;
+  }
+  .obs-box textarea::placeholder { color: #7a5a3a; }
+  .obs-box textarea:focus { border-color: var(--amarelo); }
+
+  /* CARRINHO FIXO */
+  .cart-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(180deg, transparent 0%, var(--marrom) 20%);
+    padding: 20px 16px 20px;
+    z-index: 200;
+    pointer-events: none;
+  }
+  .cart-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    pointer-events: all;
+  }
+
+  /* RESUMO MINI */
+  .cart-summary {
+    display: none;
+    background: var(--marrom-medio);
+    border: 1px solid var(--marrom-claro);
+    border-radius: 12px 12px 0 0;
+    padding: 10px 16px;
+    margin-bottom: -1px;
+    font-size: 12px;
+    color: var(--cinza);
+  }
+  .cart-summary.visible { display: block; }
+  .cart-summary span { color: var(--amarelo); font-weight: 700; }
+
+  /* BOTÃO FINALIZAR */
+  .btn-finalizar {
+    width: 100%;
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 18px 24px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    box-shadow: 0 8px 30px rgba(37,211,102,0.3);
+    transition: transform .15s, box-shadow .15s;
+  }
+  .btn-finalizar:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(37,211,102,0.4); }
+  .btn-finalizar:active { transform: translateY(0); }
+  .btn-finalizar .wpp-icon { font-size: 24px; }
+  .btn-finalizar .btn-count {
+    background: rgba(255,255,255,0.25);
+    border-radius: 20px;
+    padding: 2px 10px;
+    font-size: 16px;
+  }
+  .btn-finalizar.disabled {
+    background: var(--marrom-claro);
+    color: var(--cinza);
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
+
+  /* MODAL RESUMO */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 500;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--marrom-medio);
+    border-radius: 20px 20px 0 0;
+    border: 1px solid var(--marrom-claro);
+    border-bottom: none;
+    width: 100%;
+    max-width: 640px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 24px 20px 36px;
+    animation: slideUp .3s ease;
+  }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .modal-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--amarelo);
+    letter-spacing: 3px;
+    margin-bottom: 4px;
+  }
+  .modal-sub { font-size: 12px; color: var(--cinza); margin-bottom: 20px; }
+
+  .modal-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--marrom-claro);
+    gap: 8px;
+  }
+  .modal-item:last-of-type { border-bottom: none; }
+  .modal-item-name { font-size: 14px; font-weight: 600; flex: 1; }
+  .modal-item-qty { font-size: 13px; color: var(--cinza); }
+  .modal-item-price { font-size: 14px; font-weight: 700; color: var(--amarelo); }
+
+  .modal-total {
+    background: var(--marrom-claro);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 16px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .modal-total span:first-child {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--cinza);
+  }
+  .modal-total span:last-child {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--amarelo);
+    letter-spacing: 2px;
+  }
+
+  .modal-obs {
+    font-size: 13px;
+    color: var(--cinza);
+    background: var(--marrom-claro);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    display: none;
+  }
+  .modal-obs strong { color: var(--branco); display: block; margin-bottom: 4px; }
+  .modal-obs.visible { display: block; }
+
+  .modal-actions { display: flex; gap: 10px; }
+  .btn-voltar {
+    flex: 1;
+    background: var(--marrom-claro);
+    color: var(--cinza);
+    border: none;
+    border-radius: 10px;
+    padding: 14px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .btn-enviar {
+    flex: 2;
+    background: linear-gradient(135deg, #25D366, #128C7E);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 14px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.3);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 48px 20px;
+    color: var(--cinza);
+  }
+  .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-state p { font-size: 15px; }
+
+  /* DIVIDER */
+  .cat-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--amarelo);
+    opacity: 0.7;
+    padding: 16px 0 6px;
+    display: block;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <img src="logo.png" alt="Esquina do Espeto" style="width:110px;height:110px;object-fit:contain;margin-bottom:16px;filter:drop-shadow(0 0 20px rgba(245,168,0,0.5));">
+  <h1>Cardápio</h1>
+  <p>Churrasco & Cerveja</p>
+</div>
+
+<!-- TABS -->
+<div class="tabs-wrapper">
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('espetos')">🍢 Espetos</div>
+    <div class="tab" onclick="showTab('jantinha')">🍽️ Jantinha</div>
+    <div class="tab" onclick="showTab('porcoes')">🥩 Porções</div>
+    <div class="tab" onclick="showTab('bebidas')">🍺 Bebidas</div>
+    <div class="tab" onclick="showTab('sabado')">🫕 Sábado</div>
+  </div>
+</div>
+
+<!-- ESPETOS -->
+<div class="section active" id="sec-espetos">
+  <div class="section-title">Espetos</div>
+  <div class="section-subtitle">Selecione e escolha a quantidade</div>
+  <div id="items-espetos"></div>
+  <div class="obs-box">
+    <label>📝 Observações do pedido</label>
+    <textarea id="obs-field" rows="3" placeholder="Ex: sem cebola, ponto da carne, alergias..."></textarea>
+  </div>
+</div>
+
+<!-- JANTINHA -->
+<div class="section" id="sec-jantinha">
+  <div class="section-title">Jantinha</div>
+  <div class="section-subtitle">Arroz, feijão, fritas, farofa + espeto(s)</div>
+  <div id="items-jantinha"></div>
+</div>
+
+<!-- PORÇÕES -->
+<div class="section" id="sec-porcoes">
+  <div class="section-title">Porções</div>
+  <div class="section-subtitle">Tradição na chapa</div>
+  <div id="items-porcoes"></div>
+  <div class="obs-box">
+    <label>📝 Observações do pedido</label>
+    <textarea id="obs-field-porcoes" rows="3" placeholder="Ex: ponto da carne, sem cebola, alergias..."></textarea>
+  </div>
+</div>
+
+<!-- BEBIDAS -->
+<div class="section" id="sec-bebidas">
+  <div class="section-title">Bebidas</div>
+  <div class="section-subtitle">Geladas e refrescantes</div>
+  <div id="items-bebidas"></div>
+
+</div>
+
+<!-- SÁBADO -->
+<div class="section" id="sec-sabado">
+  <div class="section-title">Sábado</div>
+  <div class="section-subtitle">Feijoada & Tropeiro — toda semana</div>
+  <div id="items-sabado"></div>
+</div>
+
+<!-- CARRINHO FIXO -->
+<div class="cart-bar">
+  <div class="cart-inner">
+    <div class="cart-summary" id="cart-summary"></div>
+    <button class="btn-finalizar disabled" id="btn-finalizar" onclick="abrirModal()">
+      <span class="wpp-icon"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></span>
+      <span>Finalizar Pedido</span>
+      <span class="btn-count" id="btn-count">0 itens</span>
+    </button>
+  </div>
+</div>
+
+<!-- MODAL RESUMO -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-title">Seu Pedido</div>
+    <div class="modal-sub">Confira antes de enviar pelo WhatsApp</div>
+    <div id="modal-items"></div>
+    <div class="modal-obs" id="modal-obs"></div>
+    <div class="modal-total">
+      <span>Total estimado</span>
+      <span id="modal-total-val">R$ 0,00</span>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-voltar" onclick="fecharModal()">← Voltar</button>
+      <button class="btn-enviar" onclick="enviarWhatsApp()">Enviar no WhatsApp 💬</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const WPP_NUMBER = '5531994128989'; // Número com DDI+DDD sem espaços
+
+const cardapio = {
+  espetos: [
+    { id: 'e1', nome: 'Camarão', preco: 16.00 },
+    { id: 'e2', nome: 'Picanha', preco: 20.00 },
+    { id: 'e3', nome: 'Contra Filé', preco: 12.00 },
+    { id: 'e4', nome: 'Medalhão de Queijo', preco: 12.00 },
+    { id: 'e5', nome: 'Porco', preco: 10.00 },
+    { id: 'e6', nome: 'Linguiça Caseira', preco: 10.00 },
+    { id: 'e7', nome: 'Tulipa', preco: 10.00 },
+    { id: 'e8', nome: 'Romeu e Julieta', preco: 12.00 },
+    { id: 'e9', nome: 'Kafta', preco: 10.00 },
+    { id: 'e10', nome: 'Almôndega Recheada', preco: 10.00 },
+    { id: 'e11', nome: 'Medalhão de Frango', preco: 10.00 },
+    { id: 'e12', nome: 'Coração', preco: 10.00 },
+    { id: 'e13', nome: 'Coração com Bacon', preco: 10.00 },
+    { id: 'e14', nome: 'Mussarela', preco: 10.00 },
+    { id: 'e15', nome: 'Pão de Alho', preco: 8.00 },
+  ],
+  jantinha: [
+    { id: 'j1', nome: 'Jantinha com 1 Espeto', preco: 23.00, desc: 'Arroz, feijão, farofa, fritas + 1 espeto à escolha' },
+    { id: 'j2', nome: 'Jantinha com 2 Espetos', preco: 28.00, desc: 'Arroz, feijão, farofa, fritas + 2 espetos à escolha' },
+    { id: 'j3', nome: 'Strogonoff de Frango', preco: 28.00, desc: 'Receita especial da casa' },
+    { id: 'j4', nome: 'Strogonoff de Carne', preco: 28.00, desc: 'Receita especial da casa' },
+  ],
+  porcoes: [
+    { id: 'p1', nome: 'Picanha na Chapa 400g', preco: 89.90 },
+    { id: 'p2', nome: 'Picanha na Manteiga de Garrafa 400g', preco: 99.90 },
+    { id: 'p3', nome: 'Picanha 400g com Fritas 400g', preco: 119.90 },
+    { id: 'p4', nome: 'Picanha 400g com Mandioca na Manteiga 400g', preco: 119.90 },
+    { id: 'p5', nome: 'Contra Filé 400g', preco: 69.90 },
+    { id: 'p6', nome: 'Contra Filé 400g com Fritas 400g', preco: 89.90 },
+    { id: 'p7', nome: 'Filé de Tilápia 400g', preco: 44.90 },
+    { id: 'p8', nome: 'Filé de Tilápia 400g com Fritas', preco: 64.90 },
+    { id: 'p9', nome: 'Fígado Acebolado 250g', preco: 19.90 },
+    { id: 'p10', nome: 'Fígado Acebolado 500g', preco: 29.90 },
+    { id: 'p11', nome: 'Fritas 500g', preco: 25.00 },
+    { id: 'p12', nome: 'Mandioca na Manteiga de Garrafa 400g', preco: 17.90 },
+    { id: 'p13', nome: 'Mandioquinha Crocante 300g', preco: 15.90 },
+    { id: 'p14', nome: 'Mandioquinha Crocante 300g + Torresmo 300g', preco: 19.90 },
+    { id: 'p15', nome: 'Anel de Cebola (10 unidades)', preco: 12.90 },
+    { id: 'p16', nome: 'Torresmo 300g', preco: 15.90 },
+    { id: 'p17', nome: 'Torresmo 200g + Mandioca 400g na Manteiga', preco: 29.90 },
+    { id: 'p18', nome: 'Macarrão na Chapa 500g', preco: 24.90 },
+    { id: 'p19', nome: 'Macarrão na Chapa 750g', preco: 29.90 },
+    { id: 'p20', nome: 'Porção de Arroz com Alho', preco: 15.90 },
+    { id: 'p21', nome: 'Acréscimo de Bacon e Queijo', preco: 9.90 },
+  ],
+  bebidas: {
+    'Latão': [
+      { id: 'b1', nome: 'Heineken Latão', preco: 10.00 },
+      { id: 'b2', nome: 'Original Latão', preco: 8.00 },
+      { id: 'b3', nome: 'Brahma Latão', preco: 7.00 },
+      { id: 'b4', nome: 'Skol Latão', preco: 7.00 },
+      { id: 'b5', nome: 'Kaiser Latão', preco: 5.50 },
+      { id: 'b6', nome: 'Petra Latão', preco: 6.00 },
+      { id: 'b7', nome: 'Amstel Latão', preco: 6.00 },
+    ],
+    'Cerveja 600ml': [
+      { id: 'b8', nome: 'Heineken 600ml', preco: 15.00 },
+      { id: 'b9', nome: 'Original 600ml', preco: 13.00 },
+      { id: 'b10', nome: 'Spaten 600ml', preco: 13.00 },
+      { id: 'b11', nome: 'Brahma 600ml', preco: 11.00 },
+      { id: 'b12', nome: 'Eisenbahn 600ml', preco: 11.00 },
+    ],
+    'Long Neck': [
+      { id: 'b13', nome: 'Corona Long Neck', preco: 10.00 },
+      { id: 'b14', nome: 'Heineken Long Neck', preco: 10.00 },
+      { id: 'b15', nome: 'Stella Pure Gold', preco: 10.00 },
+      { id: 'b16', nome: 'Skol Beats GT e Sense', preco: 10.00 },
+      { id: 'b17', nome: 'Heineken Zero', preco: 10.00 },
+      { id: 'b18', nome: 'Budweiser Zero', preco: 8.00 },
+      { id: 'b19', nome: 'Syn Lemon Ice', preco: 6.00 },
+      { id: 'b20', nome: 'Smirnoff Ice', preco: 12.00 },
+    ],
+    'Doses': [
+      { id: 'b21', nome: 'Cachaça da Roça', preco: 6.00 },
+      { id: 'b22', nome: 'Cachaça Salinas', preco: 6.00 },
+      { id: 'b23', nome: 'Cachaça Seleta', preco: 6.00 },
+      { id: 'b24', nome: 'Whisky Buchanan', preco: 19.90 },
+      { id: 'b25', nome: 'Whisky Old Parr 12 Anos', preco: 17.90 },
+      { id: 'b26', nome: 'Whisky Jack Daniels', preco: 19.90 },
+      { id: 'b27', nome: 'Whisky Red Label', preco: 15.90 },
+      { id: 'b28', nome: 'Licor 43 com Laranja', preco: 15.90 },
+      { id: 'b29', nome: 'Campari com Laranja ou Limão', preco: 13.90 },
+      { id: 'b30', nome: 'Conhaque Dreher', preco: 6.00 },
+      { id: 'b31', nome: 'Conhaque Presidente', preco: 6.00 },
+      { id: 'b32', nome: 'Licor 43 Tradicional', preco: 16.00 },
+      { id: 'b33', nome: 'Licor 43 Chocolate', preco: 19.00 },
+    ],
+    'Drinks': [
+      { id: 'b34', nome: 'Caipirinha', preco: 16.00 },
+      { id: 'b35', nome: 'Drink Tradicional', preco: 19.00 },
+      { id: 'b36', nome: 'Da Casa', preco: 25.00 },
+      { id: 'b37', nome: 'Especial da Casa', preco: 30.00 },
+      { id: 'b38', nome: 'Copão 1 Dose', preco: 22.00 },
+      { id: 'b39', nome: 'Copão 2 Doses', preco: 25.00 },
+      { id: 'b40', nome: 'Copão Gin 1 Dose', preco: 20.00 },
+      { id: 'b41', nome: 'Copão Gin 2 Doses', preco: 25.00 },
+    ],
+    'Suco Natural': [
+      { id: 'b42', nome: 'Suco Natural Copo 330ml', preco: 10.00, desc: 'Laranja, abacaxi, maracujá, limão, pêssego' },
+      { id: 'b43', nome: 'Suco Natural Jarra 1L', preco: 20.00, desc: 'Laranja, abacaxi, maracujá, limão, pêssego' },
+    ],
+    'Refrigerantes': [
+      { id: 'b44', nome: 'Coca-Cola 2L', preco: 15.00 },
+      { id: 'b45', nome: 'Guaraná 2L', preco: 13.00 },
+      { id: 'b46', nome: 'Guaraná Zero 2L', preco: 13.00 },
+      { id: 'b47', nome: 'Coca-Cola KS', preco: 6.00 },
+      { id: 'b48', nome: 'Coca-Cola Lata 350ml', preco: 7.00 },
+      { id: 'b49', nome: 'Guaraná Lata 350ml', preco: 6.00 },
+      { id: 'b50', nome: 'Fanta Lata 350ml', preco: 6.00 },
+      { id: 'b51', nome: 'Coca-Cola 220ml', preco: 4.50 },
+      { id: 'b52', nome: 'Fanta 220ml', preco: 4.50 },
+      { id: 'b53', nome: 'Guarapan 220ml', preco: 4.50 },
+      { id: 'b54', nome: 'Limoneto', preco: 7.00 },
+      { id: 'b55', nome: 'Suco Capo', preco: 4.50 },
+      { id: 'b56', nome: 'Suco One Laranja 900ml', preco: 11.00 },
+      { id: 'b57', nome: 'Água de Coco Natural', preco: 6.00 },
+      { id: 'b58', nome: 'Água de Coco 1L', preco: 12.00 },
+      { id: 'b59', nome: 'Água Mineral', preco: 3.50 },
+      { id: 'b60', nome: 'Água com Gás', preco: 4.00 },
+      { id: 'b61', nome: 'Red Bull 250ml', preco: 12.00 },
+      { id: 'b62', nome: 'Monster 473ml', preco: 12.00 },
+    ],
+  },
+  sabado: [
+    { id: 's1', nome: 'Feijoada', preco: 25.00, desc: 'Completa, com acompanhamentos' },
+    { id: 's2', nome: 'Tropeiro com 1 Espeto', preco: 23.00, desc: 'Feijão tropeiro mineiro + 1 espeto à escolha' },
+    { id: 's3', nome: 'Tropeiro com 2 Espetos', preco: 28.00, desc: 'Feijão tropeiro mineiro + 2 espetos à escolha' },
+  ],
+};
+
+const pedido = {}; // id -> { item, qty }
+
+function fmtPreco(v) {
+  return 'R$ ' + v.toFixed(2).replace('.', ',');
+}
+
+function renderItem(item, containerId) {
+  const div = document.createElement('div');
+  div.className = 'item';
+  div.id = 'card-' + item.id;
+  div.innerHTML = `
+    <div class="item-info">
+      <div class="item-name">${item.nome}</div>
+      ${item.desc ? `<div class="item-desc">${item.desc}</div>` : ''}
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+      <div class="item-price">
+        ${fmtPreco(item.preco)}
+      </div>
+      <div class="qty-ctrl" id="qty-${item.id}">
+        <button class="qty-btn" onclick="event.stopPropagation();mudarQty('${item.id}', -1)">−</button>
+        <span class="qty-num" id="num-${item.id}">0</span>
+        <button class="qty-btn" onclick="event.stopPropagation();mudarQty('${item.id}', 1)">+</button>
+      </div>
+    </div>
+  `;
+  div.onclick = () => mudarQty(item.id, 1);
+  document.getElementById(containerId).appendChild(div);
+}
+
+function mudarQty(id, delta) {
+  // find item
+  const allItems = [
+    ...cardapio.espetos, ...cardapio.jantinha, ...cardapio.porcoes,
+    ...Object.values(cardapio.bebidas).flat(), ...cardapio.sabado
+  ];
+  const item = allItems.find(i => i.id === id);
+  if (!item) return;
+
+  const atual = pedido[id] ? pedido[id].qty : 0;
+  const novo = Math.max(0, atual + delta);
+
+  if (novo === 0) {
+    delete pedido[id];
+  } else {
+    pedido[id] = { item, qty: novo };
+  }
+
+  document.getElementById('num-' + id).textContent = novo;
+  const card = document.getElementById('card-' + id);
+  if (card) card.classList.toggle('selected', novo > 0);
+
+  atualizarCarrinho();
+}
+
+function atualizarCarrinho() {
+  const ids = Object.keys(pedido);
+  const total = ids.reduce((s, id) => s + pedido[id].item.preco * pedido[id].qty, 0);
+  const totalItens = ids.reduce((s, id) => s + pedido[id].qty, 0);
+
+  const btn = document.getElementById('btn-finalizar');
+  const count = document.getElementById('btn-count');
+  const summary = document.getElementById('cart-summary');
+
+  count.textContent = totalItens + (totalItens === 1 ? ' item' : ' itens');
+
+  if (totalItens > 0) {
+    btn.classList.remove('disabled');
+    summary.classList.add('visible');
+    summary.innerHTML = `<span>${totalItens} ${totalItens === 1 ? 'item' : 'itens'}</span> selecionados · Total estimado: <span>${fmtPreco(total)}</span>`;
+  } else {
+    btn.classList.add('disabled');
+    summary.classList.remove('visible');
+  }
+}
+
+function abrirModal() {
+  const ids = Object.keys(pedido);
+  if (!ids.length) return;
+
+  const total = ids.reduce((s, id) => s + pedido[id].item.preco * pedido[id].qty, 0);
+  const container = document.getElementById('modal-items');
+  container.innerHTML = '';
+
+  ids.forEach(id => {
+    const { item, qty } = pedido[id];
+    const div = document.createElement('div');
+    div.className = 'modal-item';
+    div.innerHTML = `
+      <span class="modal-item-name">${item.nome}</span>
+      <span class="modal-item-qty">x${qty}</span>
+      <span class="modal-item-price">${fmtPreco(item.preco * qty)}</span>
+    `;
+    container.appendChild(div);
+  });
+
+  document.getElementById('modal-total-val').textContent = fmtPreco(total);
+
+  const obs1 = document.getElementById('obs-field') ? document.getElementById('obs-field').value.trim() : '';
+  const obs2 = document.getElementById('obs-field-porcoes') ? document.getElementById('obs-field-porcoes').value.trim() : '';
+  const obs = [obs1, obs2].filter(Boolean).join(' | ');
+  const obsDiv = document.getElementById('modal-obs');
+  if (obs) {
+    obsDiv.innerHTML = `<strong>📝 Observações:</strong>${obs}`;
+    obsDiv.classList.add('visible');
+  } else {
+    obsDiv.classList.remove('visible');
+  }
+
+  document.getElementById('modal').classList.add('open');
+}
+
+function fecharModal() {
+  document.getElementById('modal').classList.remove('open');
+}
+
+function enviarWhatsApp() {
+  const ids = Object.keys(pedido);
+  const total = ids.reduce((s, id) => s + pedido[id].item.preco * pedido[id].qty, 0);
+
+  let msg = '🍢 *PEDIDO — ESQUINA DO ESPETO*\n';
+  msg += '━━━━━━━━━━━━━━━━━━━━\n\n';
+
+  ids.forEach(id => {
+    const { item, qty } = pedido[id];
+    msg += `• ${item.nome} x${qty} — ${fmtPreco(item.preco * qty)}\n`;
+  });
+
+  msg += '\n━━━━━━━━━━━━━━━━━━━━\n';
+  msg += `💰 *Total estimado: ${fmtPreco(total)}*\n`;
+
+  const obs1b = document.getElementById('obs-field') ? document.getElementById('obs-field').value.trim() : '';
+  const obs2b = document.getElementById('obs-field-porcoes') ? document.getElementById('obs-field-porcoes').value.trim() : '';
+  const obs = [obs1b, obs2b].filter(Boolean).join(' | ');
+  if (obs) msg += `\n📝 *Obs:* ${obs}\n`;
+
+  msg += '\n_Pedido feito pelo cardápio digital_';
+
+  const url = `https://wa.me/${WPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+}
+
+function showTab(tab) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('sec-' + tab).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+// RENDER
+function init() {
+  cardapio.espetos.forEach(i => renderItem(i, 'items-espetos'));
+  cardapio.jantinha.forEach(i => renderItem(i, 'items-jantinha'));
+  cardapio.porcoes.forEach(i => renderItem(i, 'items-porcoes'));
+
+  // Bebidas com categorias
+  Object.entries(cardapio.bebidas).forEach(([cat, items]) => {
+    const label = document.createElement('span');
+    label.className = 'cat-label';
+    label.textContent = cat;
+    document.getElementById('items-bebidas').appendChild(label);
+    items.forEach(i => renderItem(i, 'items-bebidas'));
+  });
+
+  cardapio.sabado.forEach(i => renderItem(i, 'items-sabado'));
+}
+
+init();
+</script>
+</body>
+</html>
