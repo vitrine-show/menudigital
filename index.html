@@ -109,28 +109,32 @@
     color: var(--amarelo);
     margin-bottom: 4px;
     position: relative;
-    display: inline-block;
+    display: block;
+    text-align: center;
   }
   .section-title::after {
     content: '';
     display: block;
     height: 3px;
-    background: linear-gradient(90deg, var(--amarelo), transparent);
+    background: linear-gradient(90deg, transparent, var(--amarelo), transparent);
     margin-top: 4px;
-    width: 100%;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
   }
   .section-subtitle {
-    font-size: 12px;
+    font-size: 9px;
     color: var(--cinza);
     font-weight: 500;
     letter-spacing: 1px;
     text-transform: uppercase;
     margin-bottom: 20px;
+    text-align: center;
   }
 
   /* ITEM CARD */
   .item {
-    background: var(--marrom-medio);
+    background: #120900;
     border: 1px solid var(--marrom-claro);
     border-radius: 10px;
     padding: 14px 16px;
@@ -153,17 +157,17 @@
     opacity: 0;
     transition: opacity .2s;
   }
-  .item:hover { border-color: var(--amarelo-escuro); background: #3a2010; }
+  .item:hover { border-color: var(--amarelo-escuro); background: #1e0f02; }
   .item.selected {
     border-color: var(--amarelo);
-    background: #3a2505;
+    background: #1a0c02;
   }
   .item.selected::before { opacity: 1; }
 
   .item-info { flex: 1; }
   .item-name {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 16px;
+    font-size: 19px;
     font-weight: 700;
     color: var(--branco);
     line-height: 1.2;
@@ -175,7 +179,7 @@
   }
   .item-price {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 18px;
+    font-size: 22px;
     font-weight: 700;
     color: var(--amarelo);
     white-space: nowrap;
@@ -451,15 +455,15 @@
 
   /* DIVIDER */
   .cat-label {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 11px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
     font-weight: 700;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
     text-transform: uppercase;
     color: var(--amarelo);
-    opacity: 0.7;
-    padding: 16px 0 6px;
+    padding: 20px 0 8px;
     display: block;
+    text-align: center;
   }
 </style>
 </head>
@@ -477,8 +481,8 @@
 <div class="tabs-wrapper">
   <div class="tabs">
     <div class="tab active" onclick="showTab('espetos')">Espetos</div>
-    <div class="tab" onclick="showTab('jantinha')">Jantinha</div>
     <div class="tab" onclick="showTab('porcoes')">Porções</div>
+    <div class="tab" onclick="showTab('jantinha')">Jantinha</div>
     <div class="tab" onclick="showTab('bebidas')">Bebidas</div>
     <div class="tab" onclick="showTab('sabado')">Sábado</div>
   </div>
@@ -495,13 +499,6 @@
   </div>
 </div>
 
-<!-- JANTINHA -->
-<div class="section" id="sec-jantinha">
-  <div class="section-title">Jantinha</div>
-  <div class="section-subtitle">Selecione e escolha a quantidade</div>
-  <div id="items-jantinha"></div>
-</div>
-
 <!-- PORÇÕES -->
 <div class="section" id="sec-porcoes">
   <div class="section-title">Porções</div>
@@ -511,6 +508,13 @@
     <label>📝 Observações do pedido</label>
     <textarea id="obs-field-porcoes" rows="3" placeholder=""></textarea>
   </div>
+</div>
+
+<!-- JANTINHA -->
+<div class="section" id="sec-jantinha">
+  <div class="section-title">Jantinha</div>
+  <div class="section-subtitle">Selecione e escolha a quantidade</div>
+  <div id="items-jantinha"></div>
 </div>
 
 <!-- BEBIDAS -->
@@ -609,6 +613,31 @@ const cardapio = {
     { id: 'p21', nome: 'Acréscimo de Bacon e Queijo', preco: 9.90 },
   ],
   bebidas: {
+    'Refrigerantes': [
+      { id: 'b44', nome: 'Coca-Cola 2L', preco: 15.00 },
+      { id: 'b45', nome: 'Guaraná 2L', preco: 13.00 },
+      { id: 'b46', nome: 'Guaraná Zero 2L', preco: 13.00 },
+      { id: 'b47', nome: 'Coca-Cola KS', preco: 6.00 },
+      { id: 'b48', nome: 'Coca-Cola Lata 350ml', preco: 7.00 },
+      { id: 'b49', nome: 'Guaraná Lata 350ml', preco: 6.00 },
+      { id: 'b50', nome: 'Fanta Lata 350ml', preco: 6.00 },
+      { id: 'b51', nome: 'Coca-Cola 220ml', preco: 4.50 },
+      { id: 'b52', nome: 'Fanta 220ml', preco: 4.50 },
+      { id: 'b53', nome: 'Guarapan 220ml', preco: 4.50 },
+      { id: 'b54', nome: 'Limoneto', preco: 7.00 },
+      { id: 'b55', nome: 'Suco Capo', preco: 4.50 },
+      { id: 'b56', nome: 'Suco One Laranja 900ml', preco: 11.00 },
+      { id: 'b57', nome: 'Água de Coco Natural', preco: 6.00 },
+      { id: 'b58', nome: 'Água de Coco 1L', preco: 12.00 },
+      { id: 'b59', nome: 'Água Mineral', preco: 3.50 },
+      { id: 'b60', nome: 'Água com Gás', preco: 4.00 },
+      { id: 'b61', nome: 'Red Bull 250ml', preco: 12.00 },
+      { id: 'b62', nome: 'Monster 473ml', preco: 12.00 },
+    ],
+    'Suco Natural': [
+      { id: 'b42', nome: 'Suco Natural Copo 330ml', preco: 10.00, desc: 'Laranja, abacaxi, maracujá, limão, pêssego' },
+      { id: 'b43', nome: 'Suco Natural Jarra 1L', preco: 20.00, desc: 'Laranja, abacaxi, maracujá, limão, pêssego' },
+    ],
     'Latão': [
       { id: 'b1', nome: 'Heineken Latão', preco: 10.00 },
       { id: 'b2', nome: 'Original Latão', preco: 8.00 },
@@ -635,6 +664,16 @@ const cardapio = {
       { id: 'b19', nome: 'Syn Lemon Ice', preco: 6.00 },
       { id: 'b20', nome: 'Smirnoff Ice', preco: 12.00 },
     ],
+    'Drinks': [
+      { id: 'b34', nome: 'Caipirinha', preco: 16.00 },
+      { id: 'b35', nome: 'Drink Tradicional', preco: 19.00 },
+      { id: 'b36', nome: 'Da Casa', preco: 25.00 },
+      { id: 'b37', nome: 'Especial da Casa', preco: 30.00 },
+      { id: 'b38', nome: 'Copão 1 Dose', preco: 22.00 },
+      { id: 'b39', nome: 'Copão 2 Doses', preco: 25.00 },
+      { id: 'b40', nome: 'Copão Gin 1 Dose', preco: 20.00 },
+      { id: 'b41', nome: 'Copão Gin 2 Doses', preco: 25.00 },
+    ],
     'Doses': [
       { id: 'b21', nome: 'Cachaça da Roça', preco: 6.00 },
       { id: 'b22', nome: 'Cachaça Salinas', preco: 6.00 },
@@ -649,41 +688,6 @@ const cardapio = {
       { id: 'b31', nome: 'Conhaque Presidente', preco: 6.00 },
       { id: 'b32', nome: 'Licor 43 Tradicional', preco: 16.00 },
       { id: 'b33', nome: 'Licor 43 Chocolate', preco: 19.00 },
-    ],
-    'Drinks': [
-      { id: 'b34', nome: 'Caipirinha', preco: 16.00 },
-      { id: 'b35', nome: 'Drink Tradicional', preco: 19.00 },
-      { id: 'b36', nome: 'Da Casa', preco: 25.00 },
-      { id: 'b37', nome: 'Especial da Casa', preco: 30.00 },
-      { id: 'b38', nome: 'Copão 1 Dose', preco: 22.00 },
-      { id: 'b39', nome: 'Copão 2 Doses', preco: 25.00 },
-      { id: 'b40', nome: 'Copão Gin 1 Dose', preco: 20.00 },
-      { id: 'b41', nome: 'Copão Gin 2 Doses', preco: 25.00 },
-    ],
-    'Suco Natural': [
-      { id: 'b42', nome: 'Suco Natural Copo 330ml', preco: 10.00, desc: 'Laranja, abacaxi, maracujá, limão, pêssego' },
-      { id: 'b43', nome: 'Suco Natural Jarra 1L', preco: 20.00, desc: 'Laranja, abacaxi, maracujá, limão, pêssego' },
-    ],
-    'Refrigerantes': [
-      { id: 'b44', nome: 'Coca-Cola 2L', preco: 15.00 },
-      { id: 'b45', nome: 'Guaraná 2L', preco: 13.00 },
-      { id: 'b46', nome: 'Guaraná Zero 2L', preco: 13.00 },
-      { id: 'b47', nome: 'Coca-Cola KS', preco: 6.00 },
-      { id: 'b48', nome: 'Coca-Cola Lata 350ml', preco: 7.00 },
-      { id: 'b49', nome: 'Guaraná Lata 350ml', preco: 6.00 },
-      { id: 'b50', nome: 'Fanta Lata 350ml', preco: 6.00 },
-      { id: 'b51', nome: 'Coca-Cola 220ml', preco: 4.50 },
-      { id: 'b52', nome: 'Fanta 220ml', preco: 4.50 },
-      { id: 'b53', nome: 'Guarapan 220ml', preco: 4.50 },
-      { id: 'b54', nome: 'Limoneto', preco: 7.00 },
-      { id: 'b55', nome: 'Suco Capo', preco: 4.50 },
-      { id: 'b56', nome: 'Suco One Laranja 900ml', preco: 11.00 },
-      { id: 'b57', nome: 'Água de Coco Natural', preco: 6.00 },
-      { id: 'b58', nome: 'Água de Coco 1L', preco: 12.00 },
-      { id: 'b59', nome: 'Água Mineral', preco: 3.50 },
-      { id: 'b60', nome: 'Água com Gás', preco: 4.00 },
-      { id: 'b61', nome: 'Red Bull 250ml', preco: 12.00 },
-      { id: 'b62', nome: 'Monster 473ml', preco: 12.00 },
     ],
   },
   sabado: [
