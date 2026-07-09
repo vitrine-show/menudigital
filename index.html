@@ -76,6 +76,21 @@
     text-transform: uppercase;
     margin-top: 4px;
   }
+  .header-promo {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--marrom-claro);
+    font-family: 'Barlow', sans-serif;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--cinza);
+    letter-spacing: 0.3px;
+  }
+  .header-promo strong {
+    color: var(--amarelo);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
 
   /* TABS */
   .tabs-wrapper {
@@ -194,6 +209,11 @@
     font-size: 12px;
     color: var(--cinza);
     margin-top: 2px;
+  }
+  .item-peso {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--cinza);
   }
   .item-price {
     font-family: 'Barlow Condensed', sans-serif;
@@ -483,6 +503,18 @@
     display: block;
     text-align: center;
   }
+  .cat-subtitle {
+    font-size: 9px;
+    color: var(--cinza);
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: -6px;
+    margin-bottom: 14px;
+    display: block;
+    text-align: center;
+  }
+
 </style>
 </head>
 <body>
@@ -493,6 +525,7 @@
   <img src="logo.png" alt="Esquina do Espeto" style="width:143px;height:143px;object-fit:contain;margin-bottom:16px;filter:drop-shadow(0 0 20px rgba(245,168,0,0.5));">
   <h1>Menu Digital</h1>
   <p>Aqui a vida tem mais sabor</p>
+  <div class="header-promo"><strong>Novidade da casa:</strong> agora servimos <strong>almoço</strong> de segunda a sábado</div>
 </div>
 
 <!-- TABS -->
@@ -502,7 +535,6 @@
     <div class="tab" onclick="showTab('porcoes')">Porções</div>
     <div class="tab" onclick="showTab('jantinha')">Jantinha</div>
     <div class="tab" onclick="showTab('bebidas')">Bebidas</div>
-    <div class="tab" onclick="showTab('sabado')">Sábado</div>
   </div>
 </div>
 
@@ -541,13 +573,6 @@
   <div class="section-subtitle">Selecione e escolha a quantidade</div>
   <div id="items-bebidas"></div>
 
-</div>
-
-<!-- SÁBADO -->
-<div class="section" id="sec-sabado">
-  <div class="section-title">Sábado</div>
-  <div class="section-subtitle">Selecione e escolha a quantidade</div>
-  <div id="items-sabado"></div>
 </div>
 
 <!-- CARRINHO FIXO -->
@@ -592,127 +617,126 @@ const cardapio = {
     { id: 'e5', nome: 'Porco', preco: 10.00 },
     { id: 'e6', nome: 'Linguiça Caseira', preco: 10.00 },
     { id: 'e7', nome: 'Tulipa', preco: 10.00 },
-    { id: 'e8', nome: 'Romeu e Julieta', preco: 12.00 },
-    { id: 'e9', nome: 'Kafta', preco: 10.00 },
-    { id: 'e10', nome: 'Almôndega Recheada', preco: 10.00 },
-    { id: 'e11', nome: 'Medalhão de Frango', preco: 10.00 },
-    { id: 'e12', nome: 'Coração', preco: 10.00 },
-    { id: 'e13', nome: 'Coração com Bacon', preco: 10.00 },
-    { id: 'e14', nome: 'Mussarela', preco: 10.00 },
-    { id: 'e15', nome: 'Pão de Alho', preco: 8.00 },
+    { id: 'e8', nome: 'Coxinha da Asa', preco: 12.00 },
+    { id: 'e9', nome: 'Romeu e Julieta', preco: 12.00 },
+    { id: 'e10', nome: 'Kafta', preco: 10.00 },
+    { id: 'e11', nome: 'Almôndega Recheada', preco: 10.00 },
+    { id: 'e12', nome: 'Medalhão de Frango', preco: 12.00 },
+    { id: 'e13', nome: 'Coração', preco: 10.00 },
+    { id: 'e14', nome: 'Coração com Bacon', preco: 10.00 },
+    { id: 'e15', nome: 'Mussarela', preco: 12.00 },
+    { id: 'e16', nome: 'Pão de Alho', preco: 8.00 },
   ],
   jantinha: [
-    { id: 'j1', nome: 'Jantinha com 1 Espeto', preco: 23.00, desc: 'Arroz, feijão, farofa, fritas + 1 espeto à escolha' },
-    { id: 'j2', nome: 'Jantinha com 2 Espetos', preco: 28.00, desc: 'Arroz, feijão, farofa, fritas + 2 espetos à escolha' },
-    { id: 'j3', nome: 'Strogonoff de Frango', preco: 28.00, desc: 'Receita especial da casa' },
-    { id: 'j4', nome: 'Strogonoff de Carne', preco: 28.00, desc: 'Receita especial da casa' },
+    { id: 'j1', nome: 'Jantinha com 1 Espeto', preco: 25.00, desc: 'Arroz, feijão, farofa, fritas + 1 espeto à escolha' },
+    { id: 'j2', nome: 'Jantinha com 2 Espetos', preco: 30.00, desc: 'Arroz, feijão, farofa, fritas + 2 espetos à escolha<br>Exceto: Camarão, Picanha e 2 Boi' },
   ],
   porcoes: [
-    { id: 'p1', nome: 'Picanha na Chapa 400g', preco: 89.90 },
-    { id: 'p2', nome: 'Picanha na Manteiga de Garrafa 400g', preco: 99.90 },
-    { id: 'p3', nome: 'Picanha 400g com Fritas 400g', preco: 119.90 },
-    { id: 'p4', nome: 'Picanha 400g com Mandioca na Manteiga 400g', preco: 119.90 },
-    { id: 'p5', nome: 'Contra Filé 400g', preco: 69.90 },
-    { id: 'p6', nome: 'Contra Filé 400g com Fritas 400g', preco: 89.90 },
-    { id: 'p7', nome: 'Filé de Tilápia 400g', preco: 44.90 },
-    { id: 'p8', nome: 'Filé de Tilápia 400g com Fritas', preco: 64.90 },
-    { id: 'p9', nome: 'Fígado Acebolado 250g', preco: 19.90 },
-    { id: 'p10', nome: 'Fígado Acebolado 500g', preco: 29.90 },
-    { id: 'p11', nome: 'Fritas 500g', preco: 25.00 },
-    { id: 'p12', nome: 'Mandioca na Manteiga de Garrafa 400g', preco: 17.90 },
-    { id: 'p13', nome: 'Mandioquinha Crocante 300g', preco: 15.90 },
-    { id: 'p14', nome: 'Mandioquinha Crocante 300g + Torresmo 300g', preco: 19.90 },
-    { id: 'p15', nome: 'Anel de Cebola (10 unidades)', preco: 12.90 },
-    { id: 'p16', nome: 'Torresmo 300g', preco: 15.90 },
-    { id: 'p17', nome: 'Torresmo 200g + Mandioca 400g na Manteiga', preco: 29.90 },
-    { id: 'p18', nome: 'Macarrão na Chapa 500g', preco: 24.90 },
-    { id: 'p19', nome: 'Macarrão na Chapa 750g', preco: 29.90 },
+    { id: 'p1', nome: 'Picanha na Chapa <span class="item-peso">400g</span>', preco: 89.90 },
+    { id: 'p2', nome: 'Picanha na Manteiga de Garrafa <span class="item-peso">400g</span>', preco: 119.90 },
+    { id: 'p3', nome: 'Picanha <span class="item-peso">400g</span> com Fritas <span class="item-peso">400g</span>', preco: 119.90 },
+    { id: 'p4', nome: 'Picanha <span class="item-peso">400g</span> com Mandioca na Manteiga de Garrafa <span class="item-peso">400g</span>', preco: 119.90 },
+    { id: 'p5', nome: 'Contra Filé <span class="item-peso">400g</span>', preco: 69.90 },
+    { id: 'p6', nome: 'Contra Filé <span class="item-peso">400g</span> com Fritas <span class="item-peso">400g</span>', preco: 89.90 },
+    { id: 'p7', nome: 'Filé de Tilápia <span class="item-peso">400g</span>', preco: 49.90 },
+    { id: 'p8', nome: 'Filé de Tilápia <span class="item-peso">400g</span> com Fritas <span class="item-peso">400g</span>', preco: 64.90 },
+    { id: 'p9', nome: 'Fígado Acebolado <span class="item-peso">250g</span>', preco: 19.90 },
+    { id: 'p10', nome: 'Fígado Acebolado <span class="item-peso">500g</span>', preco: 29.90 },
+    { id: 'p11', nome: 'Fritas <span class="item-peso">500g</span>', preco: 25.00 },
+    { id: 'p12', nome: 'Mandioca na Manteiga de Garrafa <span class="item-peso">400g</span>', preco: 17.90 },
+    { id: 'p13', nome: 'Mandioquinha Crocante <span class="item-peso">300g</span>', preco: 15.90 },
+    { id: 'p14', nome: 'Mandioquinha Crocante <span class="item-peso">300g</span> com Torresmo <span class="item-peso">300g</span>', preco: 19.90 },
+    { id: 'p15', nome: 'Anel de Cebola <span class="item-peso">(10 unidades)</span>', preco: 12.90 },
+    { id: 'p16', nome: 'Torresmo <span class="item-peso">300g</span>', preco: 15.90 },
+    { id: 'p17', nome: 'Torresmo <span class="item-peso">200g</span> com Mandioca <span class="item-peso">400g</span> na Manteiga de Garrafa', preco: 29.90 },
+    { id: 'p18', nome: 'Macarrão na Chapa <span class="item-peso">500g</span>', preco: 24.90 },
+    { id: 'p19', nome: 'Macarrão na Chapa <span class="item-peso">750g</span>', preco: 29.90 },
     { id: 'p20', nome: 'Porção de Arroz com Alho', preco: 15.90 },
     { id: 'p21', nome: 'Acréscimo de Bacon e Queijo', preco: 9.90 },
   ],
   bebidas: {
-    'Refrigerantes': [
-      { id: 'b44', nome: 'Coca-Cola 2L', preco: 15.00 },
-      { id: 'b45', nome: 'Guaraná 2L', preco: 13.00 },
-      { id: 'b46', nome: 'Guaraná Zero 2L', preco: 13.00 },
-      { id: 'b47', nome: 'Coca-Cola KS', preco: 6.00 },
-      { id: 'b48', nome: 'Coca-Cola Lata 350ml', preco: 7.00 },
-      { id: 'b49', nome: 'Guaraná Lata 350ml', preco: 6.00 },
-      { id: 'b50', nome: 'Fanta Lata 350ml', preco: 6.00 },
-      { id: 'b51', nome: 'Coca-Cola 220ml', preco: 4.50 },
-      { id: 'b52', nome: 'Fanta 220ml', preco: 4.50 },
-      { id: 'b53', nome: 'Guarapan 220ml', preco: 4.50 },
-      { id: 'b54', nome: 'Limoneto', preco: 7.00 },
-      { id: 'b55', nome: 'Suco Capo', preco: 4.50 },
-      { id: 'b56', nome: 'Suco One Laranja 900ml', preco: 11.00 },
-      { id: 'b57', nome: 'Água de Coco Natural', preco: 6.00 },
-      { id: 'b58', nome: 'Água de Coco 1L', preco: 12.00 },
-      { id: 'b59', nome: 'Água Mineral', preco: 3.50 },
-      { id: 'b60', nome: 'Água com Gás', preco: 4.00 },
-      { id: 'b61', nome: 'Red Bull 250ml', preco: 12.00 },
-      { id: 'b62', nome: 'Monster 473ml', preco: 12.00 },
-    ],
-    'Suco Natural': [
-      { id: 'b42', nome: 'Suco Natural Copo 330ml', preco: 10.00, desc: 'Laranja, abacaxi, maracujá, limão, pêssego' },
-      { id: 'b43', nome: 'Suco Natural Jarra 1L', preco: 20.00, desc: 'Laranja, abacaxi, maracujá, limão, pêssego' },
-    ],
     'Latão': [
-      { id: 'b1', nome: 'Heineken Latão', preco: 10.00 },
-      { id: 'b2', nome: 'Original Latão', preco: 8.00 },
-      { id: 'b3', nome: 'Brahma Latão', preco: 7.00 },
-      { id: 'b4', nome: 'Skol Latão', preco: 7.00 },
-      { id: 'b5', nome: 'Kaiser Latão', preco: 5.50 },
-      { id: 'b6', nome: 'Petra Latão', preco: 6.00 },
-      { id: 'b7', nome: 'Amstel Latão', preco: 6.00 },
+      { id: 'b1', nome: 'Heineken', preco: 12.00 },
+      { id: 'b2', nome: 'Original', preco: 8.00 },
+      { id: 'b3', nome: 'Brahma', preco: 7.00 },
+      { id: 'b4', nome: 'Skol', preco: 7.00 },
+      { id: 'b5', nome: 'Kaiser', preco: 6.00 },
+      { id: 'b6', nome: 'Petra', preco: 6.00 },
+      { id: 'b7', nome: 'Amstel', preco: 6.00 },
     ],
     'Cerveja 600ml': [
-      { id: 'b8', nome: 'Heineken 600ml', preco: 15.00 },
-      { id: 'b9', nome: 'Original 600ml', preco: 13.00 },
-      { id: 'b10', nome: 'Spaten 600ml', preco: 13.00 },
-      { id: 'b11', nome: 'Brahma 600ml', preco: 11.00 },
-      { id: 'b12', nome: 'Eisenbahn 600ml', preco: 11.00 },
+      { id: 'b8', nome: 'Heineken', preco: 16.00 },
+      { id: 'b9', nome: 'Corona', preco: 19.00 },
+      { id: 'b10', nome: 'Original', preco: 14.00 },
+      { id: 'b11', nome: 'Spaten', preco: 14.00 },
+      { id: 'b12', nome: 'Brahma', preco: 12.00 },
+      { id: 'b13', nome: 'Eisenbahn', preco: 12.00 },
     ],
     'Long Neck': [
-      { id: 'b13', nome: 'Corona Long Neck', preco: 10.00 },
-      { id: 'b14', nome: 'Heineken Long Neck', preco: 10.00 },
-      { id: 'b15', nome: 'Stella Pure Gold', preco: 10.00 },
-      { id: 'b16', nome: 'Skol Beats GT e Sense', preco: 10.00 },
-      { id: 'b17', nome: 'Heineken Zero', preco: 10.00 },
-      { id: 'b18', nome: 'Budweiser Zero', preco: 8.00 },
-      { id: 'b19', nome: 'Syn Lemon Ice', preco: 6.00 },
-      { id: 'b20', nome: 'Smirnoff Ice', preco: 12.00 },
-    ],
-    'Drinks': [
-      { id: 'b34', nome: 'Caipirinha', preco: 16.00 },
-      { id: 'b35', nome: 'Drink Tradicional', preco: 19.00 },
-      { id: 'b36', nome: 'Da Casa', preco: 25.00 },
-      { id: 'b37', nome: 'Especial da Casa', preco: 30.00 },
-      { id: 'b38', nome: 'Copão 1 Dose', preco: 22.00 },
-      { id: 'b39', nome: 'Copão 2 Doses', preco: 25.00 },
-      { id: 'b40', nome: 'Copão Gin 1 Dose', preco: 20.00 },
-      { id: 'b41', nome: 'Copão Gin 2 Doses', preco: 25.00 },
+      { id: 'b14', nome: 'Corona', preco: 12.00 },
+      { id: 'b15', nome: 'Heineken', preco: 10.00 },
+      { id: 'b16', nome: 'Stella Pure Gold', preco: 12.00 },
+      { id: 'b17', nome: 'Skol Beats', preco: 12.00 },
+      { id: 'b18', nome: 'Heineken Zero', preco: 12.00 },
+      { id: 'b19', nome: 'Budweiser Zero', preco: 9.00 },
+      { id: 'b20', nome: 'Syn Lemon Ice', preco: 8.00 },
+      { id: 'b21', nome: 'Smirnoff Ice', preco: 12.00 },
     ],
     'Doses': [
-      { id: 'b21', nome: 'Cachaça da Roça', preco: 6.00 },
-      { id: 'b22', nome: 'Cachaça Salinas', preco: 6.00 },
-      { id: 'b23', nome: 'Cachaça Seleta', preco: 6.00 },
-      { id: 'b24', nome: 'Whisky Buchanan', preco: 19.90 },
-      { id: 'b25', nome: 'Whisky Old Parr 12 Anos', preco: 17.90 },
-      { id: 'b26', nome: 'Whisky Jack Daniels', preco: 19.90 },
-      { id: 'b27', nome: 'Whisky Red Label', preco: 15.90 },
-      { id: 'b28', nome: 'Licor 43 com Laranja', preco: 15.90 },
-      { id: 'b29', nome: 'Campari com Laranja ou Limão', preco: 13.90 },
-      { id: 'b30', nome: 'Conhaque Dreher', preco: 6.00 },
-      { id: 'b31', nome: 'Conhaque Presidente', preco: 6.00 },
-      { id: 'b32', nome: 'Licor 43 Tradicional', preco: 16.00 },
-      { id: 'b33', nome: 'Licor 43 Chocolate', preco: 19.00 },
+      { id: 'b22', nome: 'Cachaça', preco: 6.00 },
+      { id: 'b23', nome: 'Para Tudo', preco: 5.00 },
+      { id: 'b24', nome: 'Gin Tanqueray', preco: 18.00 },
+      { id: 'b25', nome: "Gin Gordon's", preco: 15.00 },
+      { id: 'b26', nome: 'Whisky Buchanan', preco: 20.00 },
+      { id: 'b27', nome: 'Whisky Old Parr 12 Anos', preco: 18.00 },
+      { id: 'b28', nome: 'Whisky Jack Daniels', preco: 18.00 },
+      { id: 'b29', nome: 'Whisky Red Label', preco: 16.00 },
+      { id: 'b30', nome: 'Campari com Laranja ou Limão', preco: 15.00 },
+      { id: 'b31', nome: 'Conhaque Dreher', preco: 6.00 },
+      { id: 'b32', nome: 'Conhaque Presidente', preco: 6.00 },
+      { id: 'b33', nome: 'Licor 43 Tradicional', preco: 16.00 },
+      { id: 'b34', nome: 'Tequila', preco: 15.00 },
+    ],
+    'Drinks': [
+      { id: 'b35', nome: 'Caipirinha', preco: 16.00 },
+      { id: 'b36', nome: 'Copão 1 Dose', preco: 25.00 },
+      { id: 'b37', nome: 'Copão 2 Doses', preco: 30.00 },
+      { id: 'b38', nome: 'Mascate', preco: 16.00 },
+      { id: 'b39', nome: 'Bang Bang', preco: 15.00 },
+    ],
+    'Suco Natural': [
+      { id: 'b40', nome: 'Copo 330ml', preco: 10.00 },
+      { id: 'b41', nome: 'Jarra 1L', preco: 25.00 },
+    ],
+    'Água de Coco': [
+      { id: 'b42', nome: 'Água de Coco', preco: 8.00 },
+    ],
+    'Refrigerantes': [
+      { id: 'b43', nome: 'Coca-Cola KS', preco: 6.00 },
+      { id: 'b44', nome: 'Sprite KS', preco: 6.00 },
+      { id: 'b45', nome: 'Fanta KS', preco: 6.00 },
+      { id: 'b46', nome: 'Coca-Cola Lata 350ml', preco: 8.00 },
+      { id: 'b47', nome: 'Guaraná Lata 350ml', preco: 7.00 },
+      { id: 'b48', nome: 'Fanta Lata 350ml', preco: 7.00 },
+      { id: 'b49', nome: 'Sprite Lata 350ml', preco: 7.00 },
+      { id: 'b50', nome: 'Coca-Cola 220ml', preco: 5.00 },
+      { id: 'b51', nome: 'Fanta 220ml', preco: 5.00 },
+      { id: 'b52', nome: 'Guarapan 220ml', preco: 5.00 },
+      { id: 'b53', nome: 'Coca-Cola 1L', preco: 10.00 },
+      { id: 'b54', nome: 'Guaraná 1L', preco: 9.00 },
+      { id: 'b55', nome: 'Coca-Cola 2L', preco: 15.00 },
+      { id: 'b56', nome: 'Guaraná 2L', preco: 13.00 },
+      { id: 'b57', nome: 'Guaraná Zero 2L', preco: 13.00 },
+      { id: 'b58', nome: 'Fanta 2L', preco: 12.00 },
+      { id: 'b59', nome: 'Limoneto', preco: 7.00 },
+      { id: 'b60', nome: 'Suco Lata 290ml', preco: 6.00 },
+      { id: 'b61', nome: 'Suco Caixa 1L', preco: 12.00 },
+      { id: 'b62', nome: 'Água Mineral', preco: 4.00 },
+      { id: 'b63', nome: 'Água com Gás', preco: 4.50 },
+      { id: 'b64', nome: 'Red Bull 250ml', preco: 13.00 },
+      { id: 'b65', nome: 'Monster 473ml', preco: 13.00 },
     ],
   },
-  sabado: [
-    { id: 's1', nome: 'Feijoada', preco: 25.00, desc: 'Completa, com acompanhamentos' },
-    { id: 's2', nome: 'Tropeiro com 1 Espeto', preco: 23.00, desc: 'Feijão tropeiro mineiro + 1 espeto à escolha' },
-    { id: 's3', nome: 'Tropeiro com 2 Espetos', preco: 28.00, desc: 'Feijão tropeiro mineiro + 2 espetos à escolha' },
-  ],
 };
 
 const pedido = {}; // id -> { item, qty }
@@ -749,7 +773,7 @@ function mudarQty(id, delta) {
   // find item
   const allItems = [
     ...cardapio.espetos, ...cardapio.jantinha, ...cardapio.porcoes,
-    ...Object.values(cardapio.bebidas).flat(), ...cardapio.sabado
+    ...Object.values(cardapio.bebidas).flat()
   ];
   const item = allItems.find(i => i.id === id);
   if (!item) return;
@@ -837,6 +861,10 @@ function pad(str, len) {
   return str;
 }
 
+function stripHtml(str) {
+  return String(str).replace(/<[^>]+>/g, '');
+}
+
 function enviarWhatsApp() {
   const ids = Object.keys(pedido);
   const total = ids.reduce((s, id) => s + pedido[id].item.preco * pedido[id].qty, 0);
@@ -848,7 +876,7 @@ function enviarWhatsApp() {
   ids.forEach(id => {
     const { item, qty } = pedido[id];
     const preco = fmtPreco(item.preco * qty);
-    msg += '\n`' + item.nome + '`\n';
+    msg += '\n`' + stripHtml(item.nome) + '`\n';
     msg += '`Quant.: ' + qty + 'x   ' + preco + '`\n';
   });
 
@@ -878,15 +906,26 @@ function init() {
   cardapio.porcoes.forEach(i => renderItem(i, 'items-porcoes'));
 
   // Bebidas com categorias
+  const catSubtitles = {
+    'Drinks': 'Consulte sabores',
+    'Suco Natural': 'Consulte as opções',
+  };
   Object.entries(cardapio.bebidas).forEach(([cat, items]) => {
     const label = document.createElement('span');
     label.className = 'cat-label';
     label.textContent = cat;
     document.getElementById('items-bebidas').appendChild(label);
+
+    if (catSubtitles[cat]) {
+      const sub = document.createElement('span');
+      sub.className = 'cat-subtitle';
+      sub.textContent = catSubtitles[cat];
+      document.getElementById('items-bebidas').appendChild(sub);
+    }
+
     items.forEach(i => renderItem(i, 'items-bebidas'));
   });
 
-  cardapio.sabado.forEach(i => renderItem(i, 'items-sabado'));
 }
 
 init();
