@@ -504,6 +504,17 @@
     gap: 8px;
   }
   .modal-item:last-of-type { border-bottom: none; }
+  .modal-cat-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--amarelo);
+    margin-top: 16px;
+    margin-bottom: 2px;
+  }
+  .modal-cat-label:first-child { margin-top: 0; }
   .modal-item-name { font-size: 14px; font-weight: 600; flex: 1; }
   .modal-item-qty { font-size: 13px; color: var(--cinza); }
   .modal-item-price { font-size: 14px; font-weight: 700; color: var(--amarelo); }
@@ -626,7 +637,7 @@
     <div class="tab" data-tab="porcoes" onclick="showTab(event,'porcoes')">Porções</div>
     <div class="tab" data-tab="jantinha" onclick="showTab(event,'jantinha')">Jantinha</div>
     <div class="tab" data-tab="bebidasnaturais" onclick="showTab(event,'bebidasnaturais')">Natural</div>
-    <div class="tab" data-tab="refrigerantes" onclick="showTab(event,'refrigerantes')">Refrigerantes</div>
+    <div class="tab" data-tab="refrigerantes" onclick="showTab(event,'refrigerantes')">Bebidas</div>
     <div class="tab" data-tab="cervejas" onclick="showTab(event,'cervejas')">Cervejas</div>
     <div class="tab" data-tab="drinks" onclick="showTab(event,'drinks')">Drinks</div>
     <div class="tab" data-tab="doses" onclick="showTab(event,'doses')">Doses</div>
@@ -680,7 +691,7 @@
 
 <!-- REFRIGERANTES -->
 <div class="section" id="sec-refrigerantes">
-  <div class="section-title">Refrigerantes</div>
+  <div class="section-title">Bebidas</div>
   <div class="section-subtitle">Selecione e escolha a quantidade</div>
   <div id="items-refrigerantes"></div>
   <div class="obs-box">
@@ -761,7 +772,7 @@ const CATEGORIAS = [
   { key: 'porcoes', label: 'Porções' },
   { key: 'jantinha', label: 'Jantinha' },
   { key: 'bebidasnaturais', label: 'Natural' },
-  { key: 'refrigerantes', label: 'Refrigerantes' },
+  { key: 'refrigerantes', label: 'Bebidas' },
   { key: 'cervejas', label: 'Cervejas' },
   { key: 'drinks', label: 'Drinks' },
   { key: 'doses', label: 'Doses' },
@@ -1023,6 +1034,28 @@ function todosOsItens() {
   return out;
 }
 
+function mapaCategorias() {
+  const mapa = {};
+  const registrar = (itens, label) => {
+    itens.forEach(i => {
+      if (i.variants) {
+        i.variants.forEach(v => { mapa[v.id] = label; });
+      } else {
+        mapa[i.id] = label;
+      }
+    });
+  };
+  CATEGORIAS.forEach(cat => {
+    const dados = cardapio[cat.key];
+    if (dados.tipo === 'flat') {
+      registrar(dados.itens, cat.label);
+    } else {
+      dados.grupos.forEach(g => registrar(g.itens, cat.label));
+    }
+  });
+  return mapa;
+}
+
 function mudarQty(id, delta) {
   // find item
   const item = todosOsItens().find(i => i.id === id);
@@ -1082,20 +1115,31 @@ function abrirModal() {
   const ids = Object.keys(pedido);
   if (!ids.length) return;
 
+  const mapa = mapaCategorias();
   const total = ids.reduce((s, id) => s + pedido[id].item.preco * pedido[id].qty, 0);
   const container = document.getElementById('modal-items');
   container.innerHTML = '';
 
-  ids.forEach(id => {
-    const { item, qty } = pedido[id];
-    const div = document.createElement('div');
-    div.className = 'modal-item';
-    div.innerHTML = `
-      <span class="modal-item-name">${item.nome}</span>
-      <span class="modal-item-qty">x${qty}</span>
-      <span class="modal-item-price">${fmtPreco(item.preco * qty)}</span>
-    `;
-    container.appendChild(div);
+  CATEGORIAS.forEach(cat => {
+    const idsCategoria = ids.filter(id => mapa[id] === cat.label);
+    if (!idsCategoria.length) return;
+
+    const catLabel = document.createElement('div');
+    catLabel.className = 'modal-cat-label';
+    catLabel.textContent = cat.label;
+    container.appendChild(catLabel);
+
+    idsCategoria.forEach(id => {
+      const { item, qty } = pedido[id];
+      const div = document.createElement('div');
+      div.className = 'modal-item';
+      div.innerHTML = `
+        <span class="modal-item-name">${item.nome}</span>
+        <span class="modal-item-qty">x${qty}</span>
+        <span class="modal-item-price">${fmtPreco(item.preco * qty)}</span>
+      `;
+      container.appendChild(div);
+    });
   });
 
   document.getElementById('modal-total-val').textContent = fmtPreco(total);
@@ -1125,16 +1169,24 @@ function pad(str, len) {
 function enviarWhatsApp() {
   const ids = Object.keys(pedido);
   const total = ids.reduce((s, id) => s + pedido[id].item.preco * pedido[id].qty, 0);
+  const mapa = mapaCategorias();
 
   let msg = '*MENU — ESQUINA DO ESPETO*\n';
   msg += '_Pedido feito pelo menu digital_\n\n';
   msg += '`' + pad('Pedido', 17) + 'Valor .' + '`\n';
 
-  ids.forEach(id => {
-    const { item, qty } = pedido[id];
-    const preco = fmtPreco(item.preco * qty);
-    msg += '\n`' + nomeSimples(item.nome) + '`\n';
-    msg += '`Quant.: ' + qty + 'x   ' + preco + '`\n';
+  CATEGORIAS.forEach(cat => {
+    const idsCategoria = ids.filter(id => mapa[id] === cat.label);
+    if (!idsCategoria.length) return;
+
+    msg += `\n*— ${cat.label.toUpperCase()} —*\n`;
+
+    idsCategoria.forEach(id => {
+      const { item, qty } = pedido[id];
+      const preco = fmtPreco(item.preco * qty);
+      msg += '\n`' + nomeSimples(item.nome) + '`\n';
+      msg += '`Quant.: ' + qty + 'x   ' + preco + '`\n';
+    });
   });
 
   msg += '\n`─────────────────────`\n\n';
