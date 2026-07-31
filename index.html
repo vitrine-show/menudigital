@@ -34,13 +34,24 @@
     --cinza: #c8b89a;
   }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+  }
 
   body {
-    background: var(--marrom);
+    background: var(--marrom) radial-gradient(ellipse 900px 900px at center, var(--marrom-claro) 0%, var(--marrom) 65%) fixed;
     font-family: 'Barlow', sans-serif;
     color: var(--branco);
     min-height: 100vh;
+    min-height: 100dvh;
   }
 
   .page-wrapper {
@@ -48,8 +59,15 @@
     margin: 0 auto;
     background: var(--marrom);
     min-height: 100vh;
+    min-height: 100dvh;
     position: relative;
-    box-shadow: 0 0 60px rgba(0,0,0,0.8);
+    box-shadow: 0 0 80px rgba(0,0,0,0.9);
+    overflow-x: hidden;
+  }
+
+  button {
+    touch-action: manipulation;
+    font-family: inherit;
   }
 
   /* HEADER */
@@ -76,21 +94,6 @@
     text-transform: uppercase;
     margin-top: 4px;
   }
-  .header-promo {
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px solid var(--marrom-claro);
-    font-family: 'Barlow', sans-serif;
-    font-size: 12.5px;
-    font-weight: 500;
-    color: var(--cinza);
-    letter-spacing: 0.3px;
-  }
-  .header-promo strong {
-    color: var(--amarelo);
-    font-weight: 700;
-    text-transform: uppercase;
-  }
 
   /* TABS */
   .tabs-wrapper {
@@ -104,6 +107,31 @@
     z-index: 100;
   }
   .tabs-wrapper::-webkit-scrollbar { display: none; }
+  .tabs-scroll-hint {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 38px;
+    background: linear-gradient(to right, transparent, var(--marrom-medio) 55%);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 6px;
+    color: var(--amarelo);
+    font-size: 20px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: opacity .2s;
+    z-index: 2;
+  }
+  .tabs-scroll-hint:active { color: var(--branco); }
+  .tabs-scroll-hint:focus,
+  .tabs-scroll-hint:focus-visible {
+    outline: none;
+    box-shadow: inset 0 -2px 0 var(--amarelo);
+  }
   .tabs {
     display: flex;
     min-width: max-content;
@@ -132,7 +160,7 @@
   }
 
   /* SECTIONS */
-  .section { display: none; padding: 24px 16px 120px; max-width: 640px; margin: 0 auto; }
+  .section { display: none; padding: 24px 16px calc(120px + env(safe-area-inset-bottom, 0px)); max-width: 640px; margin: 0 auto; }
   .section.active { display: block; }
 
   .section-title {
@@ -164,6 +192,18 @@
     margin-bottom: 20px;
     text-align: center;
   }
+  .section-note {
+    font-size: 13px;
+    color: var(--cinza);
+    text-align: center;
+    margin: 0 0 16px;
+  }
+
+  /* SUBTITULO DE GRUPO NO MESMO ESTILO DO TITULO DA SEÇÃO (ex: Strogonoff dentro de Jantinha) */
+  .subsection-title {
+    margin-top: 28px;
+    margin-bottom: 16px;
+  }
 
   /* ITEM CARD */
   .item {
@@ -175,12 +215,14 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
+    flex-wrap: wrap;
+    gap: 10px 12px;
     cursor: pointer;
     transition: all .2s;
     position: relative;
     overflow: hidden;
   }
+  .item-info { min-width: 140px; }
   .item::before {
     content: '';
     position: absolute;
@@ -210,8 +252,8 @@
     color: var(--cinza);
     margin-top: 2px;
   }
-  .item-peso {
-    font-size: 13px;
+  .item-name .peso {
+    font-size: 14px;
     font-weight: 500;
     color: var(--cinza);
   }
@@ -229,6 +271,56 @@
     display: block;
     text-align: right;
   }
+  .item-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  /* CAIXA DE ITEM COM VARIAÇÕES (ex: Suco de Frutas - Copo / Jarra) */
+  .item-box {
+    background: #120900;
+    border: 1px solid var(--marrom-claro);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+  }
+  .item-box-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--branco);
+    margin-bottom: 4px;
+  }
+  .item-box-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    padding: 10px 0;
+    border-top: 1px solid var(--marrom-claro);
+  }
+  .item-box-row:first-of-type {
+    border-top: none;
+    padding-top: 8px;
+  }
+  .item-box-row-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--cinza);
+    flex: 1;
+  }
+  .item-box-note {
+    font-size: 11px;
+    color: var(--cinza);
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--marrom-claro);
+  }
 
   /* QTY CONTROL */
   .qty-ctrl {
@@ -240,8 +332,8 @@
     padding: 4px 6px;
   }
   .qty-btn {
-    width: 26px;
-    height: 26px;
+    width: 30px;
+    height: 30px;
     border-radius: 4px;
     border: none;
     background: var(--amarelo);
@@ -254,6 +346,7 @@
     justify-content: center;
     line-height: 1;
     transition: background .15s;
+    -webkit-tap-highlight-color: transparent;
   }
   .qty-btn:hover { background: var(--branco); }
   .qty-num {
@@ -290,7 +383,7 @@
     border-radius: 6px;
     color: var(--branco);
     font-family: 'Barlow', sans-serif;
-    font-size: 14px;
+    font-size: 16px;
     padding: 10px 12px;
     resize: none;
     outline: none;
@@ -307,7 +400,7 @@
     width: 100%;
     max-width: 640px;
     background: linear-gradient(180deg, transparent 0%, var(--marrom) 20%);
-    padding: 20px 16px 20px;
+    padding: 20px 16px calc(20px + env(safe-area-inset-bottom, 0px));
     z-index: 200;
     pointer-events: none;
   }
@@ -503,18 +596,17 @@
     display: block;
     text-align: center;
   }
-  .cat-subtitle {
-    font-size: 9px;
-    color: var(--cinza);
-    font-weight: 500;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-top: -6px;
-    margin-bottom: 14px;
-    display: block;
-    text-align: center;
-  }
 
+  /* AJUSTES PARA TELAS MUITO ESTREITAS (320px-360px) */
+  @media (max-width: 360px) {
+    .item { padding: 12px; }
+    .item-name { font-size: 17px; }
+    .item-price { font-size: 19px; }
+    .qty-ctrl { padding: 3px 5px; gap: 6px; }
+    .btn-finalizar { font-size: 17px; padding: 16px 18px; }
+    .btn-finalizar .btn-count { font-size: 14px; padding: 2px 8px; }
+    .modal { padding: 20px 14px 30px; }
+  }
 </style>
 </head>
 <body>
@@ -525,27 +617,31 @@
   <img src="logo.png" alt="Esquina do Espeto" style="width:143px;height:143px;object-fit:contain;margin-bottom:16px;filter:drop-shadow(0 0 20px rgba(245,168,0,0.5));">
   <h1>Menu Digital</h1>
   <p>Aqui a vida tem mais sabor</p>
-  <div class="header-promo"><strong>Novidade da casa:</strong> agora servimos <strong>almoço</strong> de segunda a sábado</div>
 </div>
 
 <!-- TABS -->
 <div class="tabs-wrapper">
   <div class="tabs">
-    <div class="tab active" onclick="showTab('espetos')">Espetos</div>
-    <div class="tab" onclick="showTab('porcoes')">Porções</div>
-    <div class="tab" onclick="showTab('jantinha')">Jantinha</div>
-    <div class="tab" onclick="showTab('bebidas')">Bebidas</div>
+    <div class="tab active" data-tab="espetinhos" onclick="showTab(event,'espetinhos')">Espetinhos</div>
+    <div class="tab" data-tab="porcoes" onclick="showTab(event,'porcoes')">Porções</div>
+    <div class="tab" data-tab="jantinha" onclick="showTab(event,'jantinha')">Jantinha</div>
+    <div class="tab" data-tab="bebidasnaturais" onclick="showTab(event,'bebidasnaturais')">Natural</div>
+    <div class="tab" data-tab="refrigerantes" onclick="showTab(event,'refrigerantes')">Refrigerantes</div>
+    <div class="tab" data-tab="cervejas" onclick="showTab(event,'cervejas')">Cervejas</div>
+    <div class="tab" data-tab="drinks" onclick="showTab(event,'drinks')">Drinks</div>
+    <div class="tab" data-tab="doses" onclick="showTab(event,'doses')">Doses</div>
   </div>
+  <button type="button" class="tabs-scroll-hint" id="tabsScrollHint" aria-label="Rolar menu de categorias" onclick="rolarTabs()">›</button>
 </div>
 
-<!-- ESPETOS -->
-<div class="section active" id="sec-espetos">
-  <div class="section-title">Espetos</div>
+<!-- ESPETINHOS -->
+<div class="section active" id="sec-espetinhos">
+  <div class="section-title">Espetinhos</div>
   <div class="section-subtitle">Selecione e escolha a quantidade</div>
-  <div id="items-espetos"></div>
+  <div id="items-espetinhos"></div>
   <div class="obs-box">
     <label>📝 Observações do pedido</label>
-    <textarea id="obs-field" rows="3" placeholder=""></textarea>
+    <textarea id="obs-field-espetinhos" rows="3" placeholder=""></textarea>
   </div>
 </div>
 
@@ -560,19 +656,71 @@
   </div>
 </div>
 
-<!-- JANTINHA -->
+<!-- JANTINHA (com Strogonoff como subcategoria) -->
 <div class="section" id="sec-jantinha">
   <div class="section-title">Jantinha</div>
   <div class="section-subtitle">Selecione e escolha a quantidade</div>
   <div id="items-jantinha"></div>
+  <div class="obs-box">
+    <label>📝 Observações do pedido</label>
+    <textarea id="obs-field-jantinha" rows="3" placeholder=""></textarea>
+  </div>
 </div>
 
-<!-- BEBIDAS -->
-<div class="section" id="sec-bebidas">
-  <div class="section-title">Bebidas</div>
+<!-- NATURAL -->
+<div class="section" id="sec-bebidasnaturais">
+  <div class="section-title">Natural</div>
   <div class="section-subtitle">Selecione e escolha a quantidade</div>
-  <div id="items-bebidas"></div>
+  <div id="items-bebidasnaturais"></div>
+  <div class="obs-box">
+    <label>📝 Observações do pedido</label>
+    <textarea id="obs-field-bebidasnaturais" rows="3" placeholder=""></textarea>
+  </div>
+</div>
 
+<!-- REFRIGERANTES -->
+<div class="section" id="sec-refrigerantes">
+  <div class="section-title">Refrigerantes</div>
+  <div class="section-subtitle">Selecione e escolha a quantidade</div>
+  <div id="items-refrigerantes"></div>
+  <div class="obs-box">
+    <label>📝 Observações do pedido</label>
+    <textarea id="obs-field-refrigerantes" rows="3" placeholder=""></textarea>
+  </div>
+</div>
+
+<!-- CERVEJAS (Garrafa 600ml, Latão e Long Neck como subcategorias) -->
+<div class="section" id="sec-cervejas">
+  <div class="section-title">Cervejas</div>
+  <div class="section-subtitle">Selecione e escolha a quantidade</div>
+  <div id="items-cervejas"></div>
+  <div class="obs-box">
+    <label>📝 Observações do pedido</label>
+    <textarea id="obs-field-cervejas" rows="3" placeholder=""></textarea>
+  </div>
+</div>
+
+<!-- DRINKS -->
+<div class="section" id="sec-drinks">
+  <div class="section-title">Drinks</div>
+  <div class="section-subtitle">Selecione e escolha a quantidade</div>
+  <div class="section-note">Consulte sabores</div>
+  <div id="items-drinks"></div>
+  <div class="obs-box">
+    <label>📝 Observações do pedido</label>
+    <textarea id="obs-field-drinks" rows="3" placeholder=""></textarea>
+  </div>
+</div>
+
+<!-- DOSES -->
+<div class="section" id="sec-doses">
+  <div class="section-title">Doses</div>
+  <div class="section-subtitle">Selecione e escolha a quantidade</div>
+  <div id="items-doses"></div>
+  <div class="obs-box">
+    <label>📝 Observações do pedido</label>
+    <textarea id="obs-field-doses" rows="3" placeholder=""></textarea>
+  </div>
 </div>
 
 <!-- CARRINHO FIXO -->
@@ -608,133 +756,176 @@
 <script>
 const WPP_NUMBER = '5531996202280'; // Número com DDI+DDD sem espaços
 
+const CATEGORIAS = [
+  { key: 'espetinhos', label: 'Espetinhos' },
+  { key: 'porcoes', label: 'Porções' },
+  { key: 'jantinha', label: 'Jantinha' },
+  { key: 'bebidasnaturais', label: 'Natural' },
+  { key: 'refrigerantes', label: 'Refrigerantes' },
+  { key: 'cervejas', label: 'Cervejas' },
+  { key: 'drinks', label: 'Drinks' },
+  { key: 'doses', label: 'Doses' },
+];
+
 const cardapio = {
-  espetos: [
-    { id: 'e1', nome: 'Camarão', preco: 16.00 },
-    { id: 'e2', nome: 'Picanha', preco: 20.00 },
-    { id: 'e3', nome: 'Contra Filé', preco: 12.00 },
-    { id: 'e4', nome: 'Medalhão de Queijo', preco: 12.00 },
-    { id: 'e5', nome: 'Porco', preco: 10.00 },
-    { id: 'e6', nome: 'Linguiça Caseira', preco: 10.00 },
-    { id: 'e7', nome: 'Tulipa', preco: 10.00 },
-    { id: 'e8', nome: 'Coxinha da Asa', preco: 12.00 },
-    { id: 'e9', nome: 'Romeu e Julieta', preco: 12.00 },
-    { id: 'e10', nome: 'Kafta', preco: 10.00 },
-    { id: 'e11', nome: 'Almôndega Recheada', preco: 10.00 },
-    { id: 'e12', nome: 'Medalhão de Frango', preco: 12.00 },
-    { id: 'e13', nome: 'Coração', preco: 10.00 },
-    { id: 'e14', nome: 'Coração com Bacon', preco: 10.00 },
-    { id: 'e15', nome: 'Mussarela', preco: 12.00 },
-    { id: 'e16', nome: 'Pão de Alho', preco: 8.00 },
-  ],
-  jantinha: [
-    { id: 'j1', nome: 'Jantinha com 1 Espeto', preco: 25.00, desc: 'Arroz, feijão, farofa, fritas + 1 espeto à escolha' },
-    { id: 'j2', nome: 'Jantinha com 2 Espetos', preco: 30.00, desc: 'Arroz, feijão, farofa, fritas + 2 espetos à escolha<br>Exceto: Camarão, Picanha e 2 Boi' },
-  ],
-  porcoes: [
-    { id: 'p1', nome: 'Picanha na Chapa <span class="item-peso">400g</span>', preco: 89.90 },
-    { id: 'p2', nome: 'Picanha na Manteiga de Garrafa <span class="item-peso">400g</span>', preco: 119.90 },
-    { id: 'p3', nome: 'Picanha <span class="item-peso">400g</span> com Fritas <span class="item-peso">400g</span>', preco: 119.90 },
-    { id: 'p4', nome: 'Picanha <span class="item-peso">400g</span> com Mandioca na Manteiga de Garrafa <span class="item-peso">400g</span>', preco: 119.90 },
-    { id: 'p5', nome: 'Contra Filé <span class="item-peso">400g</span>', preco: 69.90 },
-    { id: 'p6', nome: 'Contra Filé <span class="item-peso">400g</span> com Fritas <span class="item-peso">400g</span>', preco: 89.90 },
-    { id: 'p7', nome: 'Filé de Tilápia <span class="item-peso">400g</span>', preco: 49.90 },
-    { id: 'p8', nome: 'Filé de Tilápia <span class="item-peso">400g</span> com Fritas <span class="item-peso">400g</span>', preco: 64.90 },
-    { id: 'p9', nome: 'Fígado Acebolado <span class="item-peso">250g</span>', preco: 19.90 },
-    { id: 'p10', nome: 'Fígado Acebolado <span class="item-peso">500g</span>', preco: 29.90 },
-    { id: 'p11', nome: 'Fritas <span class="item-peso">500g</span>', preco: 25.00 },
-    { id: 'p12', nome: 'Mandioca na Manteiga de Garrafa <span class="item-peso">400g</span>', preco: 17.90 },
-    { id: 'p13', nome: 'Mandioquinha Crocante <span class="item-peso">300g</span>', preco: 15.90 },
-    { id: 'p14', nome: 'Mandioquinha Crocante <span class="item-peso">300g</span> com Torresmo <span class="item-peso">300g</span>', preco: 19.90 },
-    { id: 'p15', nome: 'Anel de Cebola <span class="item-peso">(10 unidades)</span>', preco: 12.90 },
-    { id: 'p16', nome: 'Torresmo <span class="item-peso">300g</span>', preco: 15.90 },
-    { id: 'p17', nome: 'Torresmo <span class="item-peso">200g</span> com Mandioca <span class="item-peso">400g</span> na Manteiga de Garrafa', preco: 29.90 },
-    { id: 'p18', nome: 'Macarrão na Chapa <span class="item-peso">500g</span>', preco: 24.90 },
-    { id: 'p19', nome: 'Macarrão na Chapa <span class="item-peso">750g</span>', preco: 29.90 },
-    { id: 'p20', nome: 'Porção de Arroz com Alho', preco: 15.90 },
-    { id: 'p21', nome: 'Acréscimo de Bacon e Queijo', preco: 9.90 },
-  ],
-  bebidas: {
-    'Latão': [
-      { id: 'b1', nome: 'Heineken', preco: 12.00 },
-      { id: 'b2', nome: 'Original', preco: 8.00 },
-      { id: 'b3', nome: 'Brahma', preco: 7.00 },
-      { id: 'b4', nome: 'Skol', preco: 7.00 },
-      { id: 'b5', nome: 'Kaiser', preco: 6.00 },
-      { id: 'b6', nome: 'Petra', preco: 6.00 },
-      { id: 'b7', nome: 'Amstel', preco: 6.00 },
+  espetinhos: {
+    tipo: 'flat',
+    itens: [
+      { id: "es1", nome: "Camarão", preco: 16.00 },
+      { id: "es2", nome: "Picanha", preco: 30.00 },
+      { id: "es3", nome: "Contra Filé", preco: 12.00 },
+      { id: "es4", nome: "Medalhão de Queijo", preco: 12.00 },
+      { id: "es5", nome: "Porco", preco: 10.00 },
+      { id: "es6", nome: "Linguiça Caseira", preco: 10.00 },
+      { id: "es7", nome: "Tulipa", preco: 10.00 },
+      { id: "es8", nome: "Coxinha da Asa", preco: 12.00 },
+      { id: "es9", nome: "Romeu e Julieta", preco: 12.00 },
+      { id: "es10", nome: "Kafta", preco: 10.00 },
+      { id: "es11", nome: "Almôndega Recheada", preco: 10.00 },
+      { id: "es12", nome: "Medalhão de Frango", preco: 12.00 },
+      { id: "es13", nome: "Coração", preco: 10.00 },
+      { id: "es14", nome: "Coração com Bacon", preco: 10.00 },
+      { id: "es15", nome: "Mussarela", preco: 12.00 },
+      { id: "es16", nome: "Pão de Alho", preco: 8.00 },
     ],
-    'Cerveja 600ml': [
-      { id: 'b8', nome: 'Heineken', preco: 16.00 },
-      { id: 'b9', nome: 'Corona', preco: 19.00 },
-      { id: 'b10', nome: 'Original', preco: 14.00 },
-      { id: 'b11', nome: 'Spaten', preco: 14.00 },
-      { id: 'b12', nome: 'Brahma', preco: 12.00 },
-      { id: 'b13', nome: 'Eisenbahn', preco: 12.00 },
+  },
+  porcoes: {
+    tipo: 'flat',
+    itens: [
+      { id: "po1", nome: "Picanha na Chapa <span class=\"peso\">400gr</span>", preco: 89.90 },
+      { id: "po2", nome: "Picanha <span class=\"peso\">400gr</span> na Mandioca <span class=\"peso\">400gr</span>", preco: 119.90 },
+      { id: "po3", nome: "Picanha <span class=\"peso\">400gr</span> com Fritas <span class=\"peso\">400g</span>", preco: 119.90 },
+      { id: "po4", nome: "Contra Filé <span class=\"peso\">400gr</span>", preco: 69.90 },
+      { id: "po5", nome: "Contra Filé <span class=\"peso\">400gr</span> com Fritas <span class=\"peso\">400gr</span>", preco: 89.90 },
+      { id: "po6", nome: "Filé de Tilápia <span class=\"peso\">400gr</span>", preco: 49.90 },
+      { id: "po7", nome: "Filé de Tilápia <span class=\"peso\">400gr</span> com Fritas <span class=\"peso\">400gr</span>", preco: 64.90 },
+      { id: "po8", nome: "Fígado Acebolado <span class=\"peso\">250gr</span>", preco: 19.90 },
+      { id: "po9", nome: "Fígado Acebolado <span class=\"peso\">500gr</span>", preco: 29.90 },
+      { id: "po10", nome: "Fritas <span class=\"peso\">500gr</span>", preco: 25.00 },
+      { id: "po11", nome: "Mandioquinha Crocante <span class=\"peso\">300gr</span>", preco: 15.90 },
+      { id: "po12", nome: "Mandioquinha Crocante <span class=\"peso\">300gr</span> com Torresmo <span class=\"peso\">300gr</span>", preco: 19.90 },
+      { id: "po13", nome: "Anel de Cebola <span class=\"peso\">10 unid.</span>", preco: 12.90 },
+      { id: "po14", nome: "Torresmo <span class=\"peso\">300gr</span>", preco: 15.90 },
+      { id: "po15", nome: "Macarrão na Chapa <span class=\"peso\">500gr</span>", preco: 28.00 },
+      { id: "po16", nome: "Porção de Arroz com Alho", preco: 15.90 },
+      { id: "po17", nome: "Acréscimo de Bacon e Queijo", preco: 9.90 },
+      { id: "po18", nome: "Purê de Batata <span class=\"peso\">300gr</span>", preco: 8.00 },
+      { id: "po19", nome: "Vinagrete <span class=\"peso\">300gr</span>", preco: 8.00 },
     ],
-    'Long Neck': [
-      { id: 'b14', nome: 'Corona', preco: 12.00 },
-      { id: 'b15', nome: 'Heineken', preco: 10.00 },
-      { id: 'b16', nome: 'Stella Pure Gold', preco: 12.00 },
-      { id: 'b17', nome: 'Skol Beats', preco: 12.00 },
-      { id: 'b18', nome: 'Heineken Zero', preco: 12.00 },
-      { id: 'b19', nome: 'Budweiser Zero', preco: 9.00 },
-      { id: 'b20', nome: 'Syn Lemon Ice', preco: 8.00 },
-      { id: 'b21', nome: 'Smirnoff Ice', preco: 12.00 },
+  },
+  jantinha: {
+    tipo: 'grupos',
+    grupos: [
+      { label: null, itens: [
+        { id: "ja1", nome: "Jantinha com 1 Espeto", preco: 32.00, desc: "Arroz branco com alho frito, purê de batata, farofa da casa e um espetinho de sua preferência. Opções de espeto no cardápio. Observação: Exceto picanha e camarão." },
+        { id: "ja2", nome: "Jantinha com 2 Espetos", preco: 35.00, desc: "Arroz branco com alho frito, purê de batata, farofa da casa e dois espetinhos de sua preferência. Opções de espeto no cardápio. Observação: Exceto 2 bois, picanha e camarão." },
+      ] },
+      { label: "Strogonoff", labelStyle: 'section', itens: [
+        { id: "st1", nome: "Strogonoff de Carne Completo <span class=\"peso\">500gr</span>", preco: 39.90, desc: "Suculenta iscas de carne envolvidas por molho de strogonoff cremoso, arroz branco com alho frito e batata palha.<br>Obs: Não possui champignon" },
+        { id: "st2", nome: "Strogonoff de Frango Completo <span class=\"peso\">500gr</span>", preco: 35.90, desc: "Suculentas iscas de frango envolvidos por um molho de strogonoff cremoso, arroz branco com alho frito, e batata palha.<br>Obs: Não possui champignon" },
+      ] },
     ],
-    'Doses': [
-      { id: 'b22', nome: 'Cachaça', preco: 6.00 },
-      { id: 'b23', nome: 'Para Tudo', preco: 5.00 },
-      { id: 'b24', nome: 'Gin Tanqueray', preco: 18.00 },
-      { id: 'b25', nome: "Gin Gordon's", preco: 15.00 },
-      { id: 'b26', nome: 'Whisky Buchanan', preco: 20.00 },
-      { id: 'b27', nome: 'Whisky Old Parr 12 Anos', preco: 18.00 },
-      { id: 'b28', nome: 'Whisky Jack Daniels', preco: 18.00 },
-      { id: 'b29', nome: 'Whisky Red Label', preco: 16.00 },
-      { id: 'b30', nome: 'Campari com Laranja ou Limão', preco: 15.00 },
-      { id: 'b31', nome: 'Conhaque Dreher', preco: 6.00 },
-      { id: 'b32', nome: 'Conhaque Presidente', preco: 6.00 },
-      { id: 'b33', nome: 'Licor 43 Tradicional', preco: 16.00 },
-      { id: 'b34', nome: 'Tequila', preco: 15.00 },
+  },
+  bebidasnaturais: {
+    tipo: 'flat',
+    itens: [
+      { id: "na1", nome: "Água de Coco", preco: 8.00 },
+      {
+        id: "na2",
+        nome: "Suco de Frutas",
+        nota: "Consulte as opções disponíveis",
+        variants: [
+          { id: "na2-copo", label: "Copo 330ml", preco: 13.00 },
+          { id: "na2-jarra", label: "Jarra 1L", preco: 29.90 },
+        ],
+      },
     ],
-    'Drinks': [
-      { id: 'b35', nome: 'Caipirinha', preco: 16.00 },
-      { id: 'b36', nome: 'Copão 1 Dose', preco: 25.00 },
-      { id: 'b37', nome: 'Copão 2 Doses', preco: 30.00 },
-      { id: 'b38', nome: 'Mascate', preco: 16.00 },
-      { id: 'b39', nome: 'Bang Bang', preco: 15.00 },
+  },
+  refrigerantes: {
+    tipo: 'flat',
+    itens: [
+      { id: "rf1", nome: "Coca-Cola <span class=\"peso\">KS</span>", preco: 7.00 },
+      { id: "rf2", nome: "Sprite <span class=\"peso\">KS</span>", preco: 7.00 },
+      { id: "rf3", nome: "Fanta <span class=\"peso\">KS</span>", preco: 7.00 },
+      { id: "rf4", nome: "Coca-Cola <span class=\"peso\">Lata 350ml</span>", preco: 8.00 },
+      { id: "rf5", nome: "Guaraná <span class=\"peso\">Lata 350ml</span>", preco: 7.00 },
+      { id: "rf6", nome: "Fanta <span class=\"peso\">Lata 350ml</span>", preco: 7.00 },
+      { id: "rf7", nome: "Sprite <span class=\"peso\">Lata 350ml</span>", preco: 7.00 },
+      { id: "rf8", nome: "Coca-Cola <span class=\"peso\">220ml</span>", preco: 5.00 },
+      { id: "rf9", nome: "Fanta <span class=\"peso\">220ml</span>", preco: 5.00 },
+      { id: "rf10", nome: "Guarapan <span class=\"peso\">220ml</span>", preco: 5.00 },
+      { id: "rf11", nome: "Coca-Cola <span class=\"peso\">1L</span>", preco: 10.00 },
+      { id: "rf12", nome: "Guaraná <span class=\"peso\">1L</span>", preco: 9.00 },
+      { id: "rf13", nome: "Coca-Cola <span class=\"peso\">2L</span>", preco: 15.00 },
+      { id: "rf14", nome: "Guaraná <span class=\"peso\">2L</span>", preco: 13.00 },
+      { id: "rf15", nome: "Guaraná Zero <span class=\"peso\">2L</span>", preco: 13.00 },
+      { id: "rf16", nome: "Fanta <span class=\"peso\">2L</span>", preco: 12.00 },
+      { id: "rf17", nome: "Limoneto", preco: 7.00 },
+      { id: "rf18", nome: "Suco <span class=\"peso\">Lata 290ml</span>", preco: 7.00 },
+      { id: "rf19", nome: "Suco <span class=\"peso\">Caixa 1L</span>", preco: 12.00 },
+      { id: "rf20", nome: "Água Mineral", preco: 4.00 },
+      { id: "rf21", nome: "Água com Gás", preco: 5.00 },
+      { id: "rf22", nome: "Red Bull <span class=\"peso\">250ml</span>", preco: 13.00 },
+      { id: "rf23", nome: "Monster <span class=\"peso\">473ml</span>", preco: 13.00 },
     ],
-    'Suco Natural': [
-      { id: 'b40', nome: 'Copo 330ml', preco: 10.00 },
-      { id: 'b41', nome: 'Jarra 1L', preco: 25.00 },
+  },
+  cervejas: {
+    tipo: 'grupos',
+    grupos: [
+      { label: "Garrafa 600ml", itens: [
+        { id: "cv1", nome: "Heineken <span class=\"peso\">600ml</span>", preco: 16.00 },
+        { id: "cv2", nome: "Corona <span class=\"peso\">600ml</span>", preco: 19.00 },
+        { id: "cv3", nome: "Stella Pure Gold <span class=\"peso\">600ml</span>", preco: 19.00 },
+        { id: "cv4", nome: "Original <span class=\"peso\">600ml</span>", preco: 14.00 },
+        { id: "cv5", nome: "Spaten <span class=\"peso\">600ml</span>", preco: 14.00 },
+        { id: "cv6", nome: "Brahma <span class=\"peso\">600ml</span>", preco: 12.00 },
+        { id: "cv7", nome: "Eisenbahn <span class=\"peso\">600ml</span>", preco: 12.00 },
+      ] },
+      { label: "Latão", itens: [
+        { id: "lt1", nome: "Heineken <span class=\"peso\">Latão</span>", preco: 12.00 },
+        { id: "lt2", nome: "Original <span class=\"peso\">Latão</span>", preco: 8.00 },
+        { id: "lt3", nome: "Brahma <span class=\"peso\">Latão</span>", preco: 7.00 },
+        { id: "lt4", nome: "Skol <span class=\"peso\">Latão</span>", preco: 7.00 },
+        { id: "lt5", nome: "Kaiser <span class=\"peso\">Latão</span>", preco: 6.00 },
+      ] },
+      { label: "Long Neck", itens: [
+        { id: "ln1", nome: "Corona <span class=\"peso\">Long Neck</span>", preco: 12.00 },
+        { id: "ln2", nome: "Heineken <span class=\"peso\">Long Neck</span>", preco: 12.00 },
+        { id: "ln3", nome: "Stella Pure Gold <span class=\"peso\">Long Neck</span>", preco: 12.00 },
+        { id: "ln4", nome: "Skol Beats <span class=\"peso\">Long Neck</span>", preco: 12.00 },
+        { id: "ln5", nome: "Heineken Zero <span class=\"peso\">Long Neck</span>", preco: 12.00 },
+        { id: "ln6", nome: "Budweiser Zero <span class=\"peso\">Long Neck</span>", preco: 9.00 },
+        { id: "ln7", nome: "Syn Lemon Ice <span class=\"peso\">Long Neck</span>", preco: 8.00 },
+        { id: "ln8", nome: "Smirnoff Ice <span class=\"peso\">Long Neck</span>", preco: 12.00 },
+      ] },
     ],
-    'Água de Coco': [
-      { id: 'b42', nome: 'Água de Coco', preco: 8.00 },
+  },
+  drinks: {
+    tipo: 'flat',
+    itens: [
+      { id: "dk1", nome: "Caipirinha", preco: 16.00 },
+      { id: "dk2", nome: "Copão 1 Dose", preco: 25.00 },
+      { id: "dk3", nome: "Copão 2 Doses", preco: 30.00 },
+      { id: "dk4", nome: "Mascate", preco: 16.00 },
+      { id: "dk5", nome: "Bang Bang", preco: 15.00 },
     ],
-    'Refrigerantes': [
-      { id: 'b43', nome: 'Coca-Cola KS', preco: 6.00 },
-      { id: 'b44', nome: 'Sprite KS', preco: 6.00 },
-      { id: 'b45', nome: 'Fanta KS', preco: 6.00 },
-      { id: 'b46', nome: 'Coca-Cola Lata 350ml', preco: 8.00 },
-      { id: 'b47', nome: 'Guaraná Lata 350ml', preco: 7.00 },
-      { id: 'b48', nome: 'Fanta Lata 350ml', preco: 7.00 },
-      { id: 'b49', nome: 'Sprite Lata 350ml', preco: 7.00 },
-      { id: 'b50', nome: 'Coca-Cola 220ml', preco: 5.00 },
-      { id: 'b51', nome: 'Fanta 220ml', preco: 5.00 },
-      { id: 'b52', nome: 'Guarapan 220ml', preco: 5.00 },
-      { id: 'b53', nome: 'Coca-Cola 1L', preco: 10.00 },
-      { id: 'b54', nome: 'Guaraná 1L', preco: 9.00 },
-      { id: 'b55', nome: 'Coca-Cola 2L', preco: 15.00 },
-      { id: 'b56', nome: 'Guaraná 2L', preco: 13.00 },
-      { id: 'b57', nome: 'Guaraná Zero 2L', preco: 13.00 },
-      { id: 'b58', nome: 'Fanta 2L', preco: 12.00 },
-      { id: 'b59', nome: 'Limoneto', preco: 7.00 },
-      { id: 'b60', nome: 'Suco Lata 290ml', preco: 6.00 },
-      { id: 'b61', nome: 'Suco Caixa 1L', preco: 12.00 },
-      { id: 'b62', nome: 'Água Mineral', preco: 4.00 },
-      { id: 'b63', nome: 'Água com Gás', preco: 4.50 },
-      { id: 'b64', nome: 'Red Bull 250ml', preco: 13.00 },
-      { id: 'b65', nome: 'Monster 473ml', preco: 13.00 },
+  },
+  doses: {
+    tipo: 'flat',
+    itens: [
+      { id: "ds1", nome: "Cachaça", preco: 6.00 },
+      { id: "ds2", nome: "Para Tudo", preco: 5.00 },
+      { id: "ds3", nome: "Gin Tanqueray", preco: 18.00 },
+      { id: "ds4", nome: "Gin Gordon's", preco: 15.00 },
+      { id: "ds5", nome: "Whisky Buchanan", preco: 20.00 },
+      { id: "ds6", nome: "Whisky Old Parr 12 Anos", preco: 18.00 },
+      { id: "ds7", nome: "Whisky Jack Daniels", preco: 18.00 },
+      { id: "ds8", nome: "Whisky Red Label", preco: 16.00 },
+      { id: "ds9", nome: "Campari com Laranja ou Limão", preco: 15.00 },
+      { id: "ds10", nome: "Conhaque Dreher", preco: 6.00 },
+      { id: "ds11", nome: "Conhaque Presidente", preco: 6.00 },
+      { id: "ds12", nome: "Licor 43 Tradicional", preco: 16.00 },
+      { id: "ds13", nome: "Tequila", preco: 15.00 },
     ],
   },
 };
@@ -754,28 +945,87 @@ function renderItem(item, containerId) {
       <div class="item-name">${item.nome}</div>
       ${item.desc ? `<div class="item-desc">${item.desc}</div>` : ''}
     </div>
-    <div style="display:flex;align-items:center;gap:10px;flex-shrink:0">
+    <div class="item-right">
       <div class="item-price">
         ${fmtPreco(item.preco)}
       </div>
       <div class="qty-ctrl" id="qty-${item.id}">
-        <button class="qty-btn" onclick="event.stopPropagation();mudarQty('${item.id}', -1)">−</button>
+        <button type="button" class="qty-btn" data-id="${item.id}" data-delta="-1">−</button>
         <span class="qty-num" id="num-${item.id}">0</span>
-        <button class="qty-btn" onclick="event.stopPropagation();mudarQty('${item.id}', 1)">+</button>
+        <button type="button" class="qty-btn" data-id="${item.id}" data-delta="1">+</button>
       </div>
     </div>
   `;
-  div.onclick = () => mudarQty(item.id, 1);
+  div.querySelectorAll('.qty-btn').forEach(btn => {
+    btn.addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      mudarQty(btn.dataset.id, parseInt(btn.dataset.delta, 10));
+    });
+  });
+  div.addEventListener('click', () => mudarQty(item.id, 1));
   document.getElementById(containerId).appendChild(div);
+}
+
+function renderVariantBox(item, containerId) {
+  const div = document.createElement('div');
+  div.className = 'item-box';
+
+  let rows = '';
+  item.variants.forEach(v => {
+    rows += `
+      <div class="item-box-row">
+        <div class="item-box-row-label">${v.label}</div>
+        <div class="item-right">
+          <div class="item-price">${fmtPreco(v.preco)}</div>
+          <div class="qty-ctrl" id="qty-${v.id}">
+            <button type="button" class="qty-btn" data-id="${v.id}" data-delta="-1">−</button>
+            <span class="qty-num" id="num-${v.id}">0</span>
+            <button type="button" class="qty-btn" data-id="${v.id}" data-delta="1">+</button>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+
+  div.innerHTML = `
+    <div class="item-box-title">${item.nome}</div>
+    ${rows}
+    ${item.nota ? `<div class="item-box-note">${item.nota}</div>` : ''}
+  `;
+  div.querySelectorAll('.qty-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      mudarQty(btn.dataset.id, parseInt(btn.dataset.delta, 10));
+    });
+  });
+  document.getElementById(containerId).appendChild(div);
+}
+
+function todosOsItens() {
+  const out = [];
+  const collect = (itens) => {
+    itens.forEach(i => {
+      if (i.variants) {
+        i.variants.forEach(v => {
+          out.push({ id: v.id, nome: `${i.nome} - ${v.label}`, preco: v.preco });
+        });
+      } else {
+        out.push(i);
+      }
+    });
+  };
+  Object.values(cardapio).forEach(cat => {
+    if (cat.tipo === 'flat') {
+      collect(cat.itens);
+    } else {
+      cat.grupos.forEach(g => collect(g.itens));
+    }
+  });
+  return out;
 }
 
 function mudarQty(id, delta) {
   // find item
-  const allItems = [
-    ...cardapio.espetos, ...cardapio.jantinha, ...cardapio.porcoes,
-    ...Object.values(cardapio.bebidas).flat()
-  ];
-  const item = allItems.find(i => i.id === id);
+  const item = todosOsItens().find(i => i.id === id);
   if (!item) return;
 
   const atual = pedido[id] ? pedido[id].qty : 0;
@@ -815,6 +1065,19 @@ function atualizarCarrinho() {
   }
 }
 
+function nomeSimples(nome) {
+  return nome.replace(/<[^>]*>/g, '');
+}
+
+function coletarObs() {
+  return CATEGORIAS
+    .map(cat => {
+      const el = document.getElementById('obs-field-' + cat.key);
+      return { label: cat.label, texto: el ? el.value.trim() : '' };
+    })
+    .filter(o => o.texto);
+}
+
 function abrirModal() {
   const ids = Object.keys(pedido);
   if (!ids.length) return;
@@ -828,7 +1091,7 @@ function abrirModal() {
     const div = document.createElement('div');
     div.className = 'modal-item';
     div.innerHTML = `
-      <span class="modal-item-name">${item.nome}${sufixoCategoria(item)}</span>
+      <span class="modal-item-name">${item.nome}</span>
       <span class="modal-item-qty">x${qty}</span>
       <span class="modal-item-price">${fmtPreco(item.preco * qty)}</span>
     `;
@@ -837,12 +1100,10 @@ function abrirModal() {
 
   document.getElementById('modal-total-val').textContent = fmtPreco(total);
 
-  const obs1 = document.getElementById('obs-field') ? document.getElementById('obs-field').value.trim() : '';
-  const obs2 = document.getElementById('obs-field-porcoes') ? document.getElementById('obs-field-porcoes').value.trim() : '';
-  const obs = [obs1, obs2].filter(Boolean).join(' | ');
+  const obsList = coletarObs();
   const obsDiv = document.getElementById('modal-obs');
-  if (obs) {
-    obsDiv.innerHTML = `<strong>📝 Observações:</strong>${obs}`;
+  if (obsList.length) {
+    obsDiv.innerHTML = '<strong>📝 Observações:</strong>' + obsList.map(o => `${o.label}: ${o.texto}`).join('<br>');
     obsDiv.classList.add('visible');
   } else {
     obsDiv.classList.remove('visible');
@@ -861,21 +1122,6 @@ function pad(str, len) {
   return str;
 }
 
-function stripHtml(str) {
-  return String(str).replace(/<[^>]+>/g, '');
-}
-
-// Categorias de bebidas cujo nome se repete entre si (ex: Heineken no Latão, 600ml e Long Neck)
-const CAT_SUFIXO = {
-  'Latão': 'Latão',
-  'Cerveja 600ml': '600ml',
-  'Long Neck': 'Long Neck',
-};
-
-function sufixoCategoria(item) {
-  return (item.categoria && CAT_SUFIXO[item.categoria]) ? ` (${CAT_SUFIXO[item.categoria]})` : '';
-}
-
 function enviarWhatsApp() {
   const ids = Object.keys(pedido);
   const total = ids.reduce((s, id) => s + pedido[id].item.preco * pedido[id].qty, 0);
@@ -887,59 +1133,106 @@ function enviarWhatsApp() {
   ids.forEach(id => {
     const { item, qty } = pedido[id];
     const preco = fmtPreco(item.preco * qty);
-    msg += '\n`' + stripHtml(item.nome) + sufixoCategoria(item) + '`\n';
+    msg += '\n`' + nomeSimples(item.nome) + '`\n';
     msg += '`Quant.: ' + qty + 'x   ' + preco + '`\n';
   });
 
   msg += '\n`─────────────────────`\n\n';
   msg += `*Total: ${fmtPreco(total)}*\n`;
 
-  const obs1b = document.getElementById('obs-field') ? document.getElementById('obs-field').value.trim() : '';
-  const obs2b = document.getElementById('obs-field-porcoes') ? document.getElementById('obs-field-porcoes').value.trim() : '';
-  const obs = [obs1b, obs2b].filter(Boolean).join(' | ');
-  if (obs) msg += `\n*OBS:*\n${obs}`;
+  const obsList = coletarObs();
+  if (obsList.length) {
+    msg += `\n*OBS:*\n` + obsList.map(o => `${o.label}: ${o.texto}`).join('\n');
+  }
 
   const url = `https://wa.me/${WPP_NUMBER}?text=${encodeURIComponent(msg)}`;
   window.open(url, '_blank');
 }
 
-function showTab(tab) {
+function showTab(ev, tab) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('sec-' + tab).classList.add('active');
-  event.currentTarget.classList.add('active');
+  const secEl = document.getElementById('sec-' + tab);
+  if (secEl) secEl.classList.add('active');
+  const tabEl = ev && ev.currentTarget ? ev.currentTarget : document.querySelector(`.tab[data-tab="${tab}"]`);
+  if (tabEl) {
+    tabEl.classList.add('active');
+    tabEl.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  }
+}
+
+function rolarTabs() {
+  const el = document.querySelector('.tabs-wrapper');
+  if (!el) return;
+  el.scrollBy({ left: 160, behavior: 'smooth' });
 }
 
 // RENDER
 function init() {
-  cardapio.espetos.forEach(i => renderItem(i, 'items-espetos'));
-  cardapio.jantinha.forEach(i => renderItem(i, 'items-jantinha'));
-  cardapio.porcoes.forEach(i => renderItem(i, 'items-porcoes'));
-
-  // Bebidas com categorias
-  const catSubtitles = {
-    'Drinks': 'Consulte sabores',
-    'Suco Natural': 'Consulte as opções',
-  };
-  Object.entries(cardapio.bebidas).forEach(([cat, items]) => {
-    const label = document.createElement('span');
-    label.className = 'cat-label';
-    label.textContent = cat;
-    document.getElementById('items-bebidas').appendChild(label);
-
-    if (catSubtitles[cat]) {
-      const sub = document.createElement('span');
-      sub.className = 'cat-subtitle';
-      sub.textContent = catSubtitles[cat];
-      document.getElementById('items-bebidas').appendChild(sub);
+  CATEGORIAS.forEach(cat => {
+    const dados = cardapio[cat.key];
+    const containerId = 'items-' + cat.key;
+    if (dados.tipo === 'flat') {
+      dados.itens.forEach(i => {
+        if (i.variants) {
+          renderVariantBox(i, containerId);
+        } else {
+          renderItem(i, containerId);
+        }
+      });
+    } else {
+      dados.grupos.forEach(g => {
+        if (g.label) {
+          if (g.labelStyle === 'section') {
+            const lbl = document.createElement('div');
+            lbl.className = 'section-title subsection-title';
+            lbl.textContent = g.label;
+            document.getElementById(containerId).appendChild(lbl);
+          } else {
+            const lbl = document.createElement('span');
+            lbl.className = 'cat-label';
+            lbl.textContent = g.label;
+            document.getElementById(containerId).appendChild(lbl);
+          }
+        }
+        g.itens.forEach(i => {
+          if (i.variants) {
+            renderVariantBox(i, containerId);
+          } else {
+            renderItem(i, containerId);
+          }
+        });
+      });
     }
-
-    items.forEach(i => { i.categoria = cat; renderItem(i, 'items-bebidas'); });
   });
-
 }
 
 init();
+
+// ROLAGEM DAS ABAS NO DESKTOP (mouse) — no touch/mobile o dedo já rola normalmente
+const tabsWrapperEl = document.querySelector('.tabs-wrapper');
+const tabsHintEl = document.getElementById('tabsScrollHint');
+
+function atualizarHintAbas() {
+  if (!tabsWrapperEl || !tabsHintEl) return;
+  const semOverflow = tabsWrapperEl.scrollWidth <= tabsWrapperEl.clientWidth + 1;
+  const chegouNoFim = tabsWrapperEl.scrollLeft + tabsWrapperEl.clientWidth >= tabsWrapperEl.scrollWidth - 2;
+  tabsHintEl.style.opacity = (semOverflow || chegouNoFim) ? '0' : '1';
+}
+
+if (tabsWrapperEl) {
+  tabsWrapperEl.addEventListener('wheel', (e) => {
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+      e.preventDefault();
+      tabsWrapperEl.scrollLeft += e.deltaY;
+    }
+  }, { passive: false });
+
+  tabsWrapperEl.addEventListener('scroll', atualizarHintAbas);
+  window.addEventListener('resize', atualizarHintAbas);
+  atualizarHintAbas();
+}
+
 </script>
 </div>
 </body>
