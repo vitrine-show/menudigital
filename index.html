@@ -99,21 +99,17 @@
   .tabs-wrapper {
     background: var(--marrom-medio);
     border-bottom: 2px solid var(--marrom-claro);
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    display: flex;
     position: sticky;
     top: 0;
     z-index: 100;
   }
-  .tabs-wrapper::-webkit-scrollbar { display: none; }
+  .tabs-viewport { min-width: 0; flex: 1; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .tabs-viewport::-webkit-scrollbar { display: none; }
   .tabs-scroll-hint {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
+    flex: 0 0 38px;
     width: 38px;
-    background: linear-gradient(to right, transparent, var(--marrom-medio) 55%);
+    background: var(--marrom-medio);
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -632,6 +628,7 @@
 
 <!-- TABS -->
 <div class="tabs-wrapper">
+  <div class="tabs-viewport">
   <div class="tabs">
     <div class="tab active" data-tab="espetinhos" onclick="showTab(event,'espetinhos')">Espetinhos</div>
     <div class="tab" data-tab="porcoes" onclick="showTab(event,'porcoes')">Porções</div>
@@ -641,6 +638,7 @@
     <div class="tab" data-tab="cervejas" onclick="showTab(event,'cervejas')">Cervejas</div>
     <div class="tab" data-tab="drinks" onclick="showTab(event,'drinks')">Drinks</div>
     <div class="tab" data-tab="doses" onclick="showTab(event,'doses')">Doses</div>
+  </div>
   </div>
   <button type="button" class="tabs-scroll-hint" id="tabsScrollHint" aria-label="Rolar menu de categorias" onclick="rolarTabs()">›</button>
 </div>
@@ -1214,7 +1212,7 @@ function showTab(ev, tab) {
 }
 
 function rolarTabs() {
-  const el = document.querySelector('.tabs-wrapper');
+  const el = document.querySelector('.tabs-viewport');
   if (!el) return;
   el.scrollBy({ left: 160, behavior: 'smooth' });
 }
@@ -1262,7 +1260,7 @@ function init() {
 init();
 
 // ROLAGEM DAS ABAS NO DESKTOP (mouse) — no touch/mobile o dedo já rola normalmente
-const tabsWrapperEl = document.querySelector('.tabs-wrapper');
+const tabsWrapperEl = document.querySelector('.tabs-viewport');
 const tabsHintEl = document.getElementById('tabsScrollHint');
 
 function atualizarHintAbas() {
@@ -1270,6 +1268,7 @@ function atualizarHintAbas() {
   const semOverflow = tabsWrapperEl.scrollWidth <= tabsWrapperEl.clientWidth + 1;
   const chegouNoFim = tabsWrapperEl.scrollLeft + tabsWrapperEl.clientWidth >= tabsWrapperEl.scrollWidth - 2;
   tabsHintEl.style.opacity = (semOverflow || chegouNoFim) ? '0' : '1';
+  tabsHintEl.disabled = semOverflow || chegouNoFim;
 }
 
 if (tabsWrapperEl) {
