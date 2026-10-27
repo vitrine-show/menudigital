@@ -112,10 +112,10 @@
     background: var(--marrom-medio);
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    padding-right: 6px;
+    justify-content: center;
+    padding: 0;
     color: var(--amarelo);
-    font-size: 20px;
+    font-size: 24px;
     font-weight: 700;
     border: none;
     cursor: pointer;
@@ -628,6 +628,7 @@
 
 <!-- TABS -->
 <div class="tabs-wrapper">
+  <button type="button" class="tabs-scroll-hint" id="tabsScrollBack" aria-label="Voltar categorias" onclick="rolarTabs(-1)">←</button>
   <div class="tabs-viewport">
   <div class="tabs">
     <div class="tab active" data-tab="espetinhos" onclick="showTab(event,'espetinhos')">Espetinhos</div>
@@ -640,7 +641,7 @@
     <div class="tab" data-tab="doses" onclick="showTab(event,'doses')">Doses</div>
   </div>
   </div>
-  <button type="button" class="tabs-scroll-hint" id="tabsScrollHint" aria-label="Rolar menu de categorias" onclick="rolarTabs()">›</button>
+  <button type="button" class="tabs-scroll-hint" id="tabsScrollHint" aria-label="Rolar menu de categorias" onclick="rolarTabs(1)">→</button>
 </div>
 
 <!-- ESPETINHOS -->
@@ -1211,10 +1212,10 @@ function showTab(ev, tab) {
   }
 }
 
-function rolarTabs() {
+function rolarTabs(direcao = 1) {
   const el = document.querySelector('.tabs-viewport');
   if (!el) return;
-  el.scrollBy({ left: 160, behavior: 'smooth' });
+  el.scrollBy({ left: 160 * direcao, behavior: 'smooth' });
 }
 
 // RENDER
@@ -1262,6 +1263,7 @@ init();
 // ROLAGEM DAS ABAS NO DESKTOP (mouse) — no touch/mobile o dedo já rola normalmente
 const tabsWrapperEl = document.querySelector('.tabs-viewport');
 const tabsHintEl = document.getElementById('tabsScrollHint');
+const tabsBackEl = document.getElementById('tabsScrollBack');
 
 function atualizarHintAbas() {
   if (!tabsWrapperEl || !tabsHintEl) return;
@@ -1269,6 +1271,8 @@ function atualizarHintAbas() {
   const chegouNoFim = tabsWrapperEl.scrollLeft + tabsWrapperEl.clientWidth >= tabsWrapperEl.scrollWidth - 2;
   tabsHintEl.style.opacity = (semOverflow || chegouNoFim) ? '0' : '1';
   tabsHintEl.disabled = semOverflow || chegouNoFim;
+  tabsBackEl.disabled = semOverflow || tabsWrapperEl.scrollLeft <= 1;
+  tabsBackEl.style.opacity = tabsBackEl.disabled ? '0' : '1';
 }
 
 if (tabsWrapperEl) {
