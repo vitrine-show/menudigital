@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Esquina do Espeto - Churrasco &amp; Cerveja</title>
+  <meta name="description" content="Cardápio da Esquina do Espeto: espetinhos na brasa, porções, jantinha, hambúrguer artesanal, cervejas e drinks.">
+  <meta name="theme-color" content="#FFFFFF">
+  <link rel="icon" type="image/png" href="icon.png">
+  <link rel="apple-touch-icon" href="icon.png">
+  <link rel="canonical" href="https://vitrine-show.github.io/menu-bot/">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://vitrine-show.github.io/menu-bot/">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="Esquina do Espeto">
+  <meta property="og:title" content="Esquina do Espeto - Churrasco &amp; Cerveja">
+  <meta property="og:description" content="Espetinhos na brasa, porções, jantinha e cerveja gelada. Veja o cardápio.">
+  <meta property="og:image" content="https://vitrine-show.github.io/menu-bot/miniatura.png">
+  <meta property="og:image:width" content="1080">
+  <meta property="og:image:height" content="1080">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://vitrine-show.github.io/menu-bot/miniatura.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=whatsapp-barra-4">
+</head>
+<body>
+  <!-- Barra superior disponível em todas as telas -->
+  <header class="appbar" id="appbar">
+    <div class="appbar-row">
+      <button class="ibtn" id="btnMenu" type="button" aria-label="Categorias" aria-controls="drawer" aria-expanded="false" data-icon="menu"></button>
+      <a class="brand" href="#/" aria-label="Início">
+        <img src="logo-web.svg" alt="" width="32" height="32">
+        <span>ESQUINA DO ESPETO</span>
+      </a>
+      <button class="ibtn bag-ibtn" id="btnBagTop" type="button" aria-label="Ver pedido" data-icon="bag"><span class="dot" id="bagDot" hidden></span></button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <main class="main">
+      <!-- INÍCIO -->
+      <section class="home" id="home" aria-label="Menu digital">
+        <div class="hero-message">
+          <p class="menu-title">MENU DIGITAL</p>
+          <p class="howto">AQUI A VIDA TEM MAIS SABOR</p>
+        </div>
+        <ul class="catlist" id="catList" aria-label="Categorias"></ul>
+      </section>
+
+      <!-- CARDÁPIO -->
+      <section class="menu" id="menu" hidden aria-label="Cardápio">
+        <div id="menuBody"></div>
+      </section>
+    </main>
+
+    <!-- PEDIDO: coluna à direita no desktop, painel deslizante no celular -->
+    <aside class="bag" id="bag" aria-labelledby="bagTitle" aria-hidden="false">
+      <div class="bag-head">
+        <h2 id="bagTitle">Seu pedido</h2>
+        <button class="link-btn bag-clear" id="btnClear" type="button" hidden>Limpar</button>
+        <button class="ibtn bag-close" id="btnBagClose" type="button" aria-label="Fechar pedido" data-icon="x"></button>
+      </div>
+      <div class="bag-scroll">
+        <div class="bag-empty" id="bagEmpty">
+          <span data-icon="bag" aria-hidden="true"></span>
+          <p><strong>Seu pedido está vazio</strong><br>Os itens que você adicionar aparecem aqui.</p>
+        </div>
+        <ul class="bag-list" id="bagList"></ul>
+        <div class="bag-form" id="bagForm" hidden>
+          <label for="obs">Observações</label>
+          <textarea id="obs" rows="3"></textarea>
+        </div>
+      </div>
+      <div class="bag-foot" id="bagFoot" hidden>
+        <div class="bag-total"><span id="bagCount">0 itens</span><strong id="bagTotal">R$ 0,00</strong></div>
+        <a class="cta" id="btnSend" href="#" rel="noopener">
+          <span data-icon="whatsapp" aria-hidden="true"></span><span>Finalizar pedido</span><span class="send-qty" id="sendQty">0 itens</span>
+        </a>
+        <button class="continue-shopping" id="btnContinue" type="button">Continuar comprando</button>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Barra flutuante "Finalizar pedido" (celular/tablet) -->
+  <div class="bagbar-actions" id="bagbarActions" hidden>
+    <button class="continue-shopping" id="btnContinueBar" type="button">Continuar comprando</button>
+    <button class="bagbar" id="bagbar" type="button" hidden>
+      <span id="bbQty" hidden>0</span>
+      <span class="bagbar-label"><span data-icon="whatsapp" aria-hidden="true"></span><span>Finalizar pedido</span></span>
+      <span class="bagbar-total" id="bbTotal">R$ 0,00</span>
+    </button>
+  </div>
+
+  <!-- Menu lateral (≡) -->
+  <nav class="drawer" id="drawer" aria-label="Categorias" aria-hidden="true">
+    <div class="drawer-head">
+      <img src="logo-web.svg" alt="" width="40" height="40">
+      <div><strong>ESQUINA DO ESPETO</strong><span>MENU DIGITAL</span></div>
+      <button class="ibtn" id="btnDrawerClose" type="button" aria-label="Fechar" data-icon="x"></button>
+    </div>
+    <a class="drawer-home" href="#/"><span data-icon="home" aria-hidden="true"></span>Início</a>
+    <ul id="drawerList"></ul>
+  </nav>
+
+  <div class="scrim" id="scrim" hidden></div>
+
+  <script src="data.js?v=030bfcc51cbd-pedido"></script>
+  <script src="app.js?v=whatsapp-oficial-2026"></script>
+</body>
+</html>
