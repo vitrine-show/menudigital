@@ -4,7 +4,7 @@ window.MENU = [
     ["Camarão", 16], ["Picanha", 30], ["Contra Filé", 14], ["Medalhão de Queijo", 12], ["Porco", 12],
     ["Linguiça Caseira", 12], ["Tulipa", 12], ["Coxinha da Asa", 12], ["Romeu e Julieta", 14], ["Kafta", 12],
     ["Almôndega Recheada", 12], ["Medalhão de Frango", 12], ["Coração", 12], ["Coração com Bacon", 12],
-    ["Mussarela", 12], ["Pão de Alho", 8]
+    ["Mussarela", 12], ["Pão de Alho", 10]
   ]}]},
   { id: "porcoes", nome: "Porções", icone: "porcao", grupos: [{ itens: [
     ["Picanha na Chapa 400gr", 89.9], ["Picanha 400gr na Mandioca 400gr", 119.9], ["Picanha 400gr com Fritas 400g", 119.9],
